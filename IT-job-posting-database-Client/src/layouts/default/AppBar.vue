@@ -1,0 +1,32 @@
+<template>
+  <v-app-bar primary>
+    <v-app-bar-title>
+      <v-icon icon="mdi-circle-slice-4" />
+      БАНК IT ВАКАНСИЙ
+
+    </v-app-bar-title>
+    <v-btn class="auth" to="/"> Главная </v-btn>
+    <v-btn class="auth" to="/signup">Войти </v-btn>
+  </v-app-bar>
+</template>
+
+<script>
+
+// export default {
+//   data: () => ({
+//     text: 'Войти'
+//   }),
+//   beforeUpdate() {
+//     if (localStorage.getItem("email") != null) {
+//       this.text = 'Аккаунт'
+//       this.visible = false
+
+
+//     }
+//   },
+
+
+// };
+
+
+</script>
