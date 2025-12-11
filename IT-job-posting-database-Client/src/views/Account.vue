@@ -13,7 +13,7 @@
               <v-data-iterator :items="items" :items-per-page="itemsPerPage" style="padding:40px;">
                 <template v-slot:header="{ page, pageCount, prevPage, nextPage }">
                   <h1 class="text-h4 font-weight-bold d-flex justify-space-between mb-4 align-center">
-                    <div class="text-truncate">Мои Резюме</div>
+                    <div class="text-truncate">Мои Резюме <v-btn variant="outlined" to="/create-resume"> Создать резюме</v-btn></div>
 
                     <div class="d-flex align-center">
                       <v-btn class="me-8" variant="text" @click="onClickSeeAll">

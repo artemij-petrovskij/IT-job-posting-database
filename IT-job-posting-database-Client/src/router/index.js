@@ -102,7 +102,7 @@ const routes = [
 
   {
     path: '/create-company',
-    component: () => import('@/layouts/logged/Default.vue'),
+    component: () => import('@/layouts/admin/Default.vue'),
     children: [
       {
         path: '',
@@ -125,17 +125,6 @@ const routes = [
     ],
   },
 
-  {
-    path: '/edit-advert',
-    component: () => import('@/layouts/logged/Default.vue'),
-    children: [
-      {
-        path: '',
-        name: 'Edit',
-        component: () => import('@/views/Edit-TTN.vue'),
-      },
-    ],
-  },
 
   {
     path: '/resumes',

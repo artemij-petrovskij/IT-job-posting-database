@@ -1,45 +1,123 @@
 <template>
-  <!-- <v-app-bar primary>
-    <v-app-bar-title>
-      <v-icon icon="mdi-circle-slice-4" />
-      БАНК ВАКАНСИЙ
-    </v-app-bar-title>
-    <v-btn class="auth" to="/logged"> Каталог </v-btn>
-    <v-btn class="auth" to="/create-advert"> СОЗДАТЬ РЕЗЮМЕ </v-btn>
-    <v-btn class="auth" to="/my-account"> Мои резюме ({{ current_user }}) </v-btn>
-    <v-btn class="auth" @click="logout()"> Выйти </v-btn>
-  </v-app-bar> -->
-  <v-app-bar :elevation="5" rounded>
+
+  <v-app-bar :elevation="2" rounded>
     <template v-slot:prepend>
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
     </template>
 
-    <v-app-bar-title>БАНК IT ВАКАНСИЙ</v-app-bar-title>
+    <v-app-bar-title>IT-Вакансии</v-app-bar-title>
 
-    <template v-slot:append sm="3" xl="3" v-if="hr_mode">
-      <v-btn class="auth" to="/vacancies" color="deep-orange-accent-4"> Вакансии </v-btn>
+ <template v-slot:append v-if="hr_mode">
+      <!-- Кнопки, которые видны только на больших экранах -->
+      <div class="desktop-buttons d-none d-md-flex">
+        <v-btn class="auth" to="/vacancies" color="deep-orange-accent-4">
+          Вакансии
+        </v-btn>
+        <v-btn class="auth" to="/create-resume">
+          Создать резюме
+        </v-btn>
+        <v-btn class="auth" to="/replies">
+          Мои отклики ({{ current_user }})
+        </v-btn>
+        <v-btn class="auth" to="/resumes">
+          Мои резюме ({{ current_user }})
+        </v-btn>
+      </div>
 
-      <v-btn class="auth" to="/create-resume"> Создать резюме</v-btn>
-      <v-btn class="auth" to="/replies"> Мои отклики ({{ current_user }}) </v-btn>
+      <!-- Меню (всегда видно, но содержимое меняется) -->
+      <v-menu>
+        <template v-slot:activator="{ props }">
+          <v-btn icon="mdi-menu" variant="text" v-bind="props"></v-btn>
+        </template>
 
-      <v-btn class="auth" to="/resumes"> Мои резюме ({{ current_user }}) </v-btn>
+        <v-list width="300px">
+          <!-- Кнопки, которые показываются только в меню на маленьких экранах -->
+          <div class="d-md-none">
+            <v-btn block variant="text" to="/vacancies">
+              Вакансии
+            </v-btn>
+            <v-btn block variant="text" to="/create-resume">
+              Создать резюме
+            </v-btn>
+            <v-btn block variant="text" to="/replies">
+              Мои отклики ({{ current_user }})
+            </v-btn>
+            <v-btn block variant="text" to="/resumes">
+              Мои резюме ({{ current_user }})
+            </v-btn>
+            <v-divider></v-divider>
+          </div>
 
-      <v-btn class="auth" to="/companies"> Компании </v-btn>
-
-      <v-btn class="auth" @click="logout()"> Выйти </v-btn>
+          <!-- Кнопки, которые всегда в меню -->
+          <v-btn block variant="text">
+            Аккаунт
+          </v-btn>
+          <v-btn block variant="text" to="/companies">
+            Оставить отзыв о компании
+          </v-btn>
+          <v-btn block variant="text" @click="logout()">
+            Выйти
+          </v-btn>
+        </v-list>
+      </v-menu>
     </template>
 
-    <template v-slot:append sm="3" xl="3" v-if="user_mode">
+        <template v-slot:append v-if="user_mode">
+      <!-- Кнопки, которые видны только на больших экранах -->
+      <div class="desktop-buttons d-none d-md-flex">
+        <v-btn class="auth" to="/vacancies" color="deep-orange-accent-4">
+          Вакансии
+        </v-btn>
+        <v-btn class="auth" to="/all-replies">
+          Отклики {{ current_user }}
+        </v-btn>
+        <v-btn class="auth" to="/create-vacancy" color="deep-orange-accent-4">
+          Создать вакансию
+        </v-btn>
+        <v-btn class="auth" to="/applicants" color="deep-orange-accent-4">
+          Резюме
+        </v-btn>
+        <v-btn class="auth" to="/create-category">
+          Категории
+        </v-btn>
+        <!-- <v-btn class="auth" @click="logout()">
+          Выйти
+        </v-btn> -->
+      </div>
 
-      <v-btn class="auth" to="/vacancies" color="deep-orange-accent-4"> Вакансии </v-btn>
-      <v-btn class="auth" to="/all-replies"> Отклики {{ current_user }} </v-btn>
-      <v-btn class="auth" to="/create-vacancy" color="deep-orange-accent-4"> Создать вакансию</v-btn>
-      <v-btn class="auth" to="/applicants" color="deep-orange-accent-4"> Резюме </v-btn>
-      <v-btn class="auth" to="/create-company"> Компании</v-btn>
-      <v-btn class="auth" to="/create-category"> Категории</v-btn>
+      <!-- Меню (всегда видно, но содержимое меняется) -->
+      <v-menu>
+        <template v-slot:activator="{ props }">
+          <v-btn icon="mdi-menu" variant="text" v-bind="props"></v-btn>
+        </template>
 
+        <v-list width="300px">
+          <!-- Кнопки, которые показываются только в меню на маленьких экранах -->
+          <div class="d-md-none">
+            <v-btn block variant="text" to="/vacancies">
+              Вакансии
+            </v-btn>
+            <v-btn block variant="text" to="/all-replies">
+              Отклики {{ current_user }}
+            </v-btn>
+            <v-btn block variant="text" to="/create-vacancy">
+              Создать вакансию
+            </v-btn>
+            <v-btn block variant="text" to="/applicants">
+              Резюме
+            </v-btn>
+            <v-btn block variant="text" to="/create-category">
+              Категории
+            </v-btn>
+            <v-divider></v-divider>
+          </div>
 
-      <v-btn class="auth" @click="logout()"> Выйти </v-btn>
+          <!-- Кнопки, которые всегда в меню (например, выход) -->
+          <v-btn block variant="text" @click="logout()">
+            Выйти
+          </v-btn>
+        </v-list>
+      </v-menu>
     </template>
   </v-app-bar>
 </template>

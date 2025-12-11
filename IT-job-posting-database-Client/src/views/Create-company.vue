@@ -107,16 +107,7 @@ export default {
             });
             this.categoryId = found.id
         },
-        // taxCalc() {
-
-        //     this.tax_amount = this.without_tax * this.tax_rate / 100
-        //     this.with_tax = this.without_tax * 1 + this.tax_amount
-        // },
-        // taxCalc2() {
-
-        //     this.amount = this.cost * this.rate / 100
-        //     this.cost_with_VAT = this.cost * 1 + this.rate
-        // },
+  
         async createAdv() {
             if (this.name != null && this.description != null) {
                 let data = {

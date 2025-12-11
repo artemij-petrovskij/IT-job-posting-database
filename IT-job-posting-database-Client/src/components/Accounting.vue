@@ -57,7 +57,7 @@
             <template v-slot:header="{ page, pageCount, prevPage, nextPage }">
               <h1 class="text-h4 font-weight-bold d-flex justify-space-between mb-4 align-center">
                 <div class="text-truncate">
-                  <!-- Легковые авто -->
+            
                 </div>
 
                 <div class="d-flex align-center">
@@ -184,73 +184,6 @@ export default {
       }
     },
 
-    // async loadTN() {
-    //   let data = {
-    //     email: localStorage.getItem("email")
-
-    //   };
-    //   let response = await Advert.allAdverts('-TN');
-    //   if (response.err) {
-    //     console.log("Empty my_adverts list");
-    //   } else {
-    //     this.items = response.reverse();
-    //     console.log(response.reverse())
-    //   }
-    // },
-
-    // async loadPKO() {
-    //   let data = {
-    //     email: localStorage.getItem("email")
-
-    //   };
-    //   let response = await Advert.allAdverts('-PKO');
-    //   if (response.err) {
-    //     console.log("Empty my_adverts list");
-    //   } else {
-    //     this.items = response.reverse();
-    //     console.log(response.reverse())
-    //   }
-    // },
-    // async loadRKO() {
-    //   let data = {
-    //     email: localStorage.getItem("email")
-
-    //   };
-    //   let response = await Advert.allAdverts('-RKO');
-    //   if (response.err) {
-    //     console.log("Empty my_adverts list");
-    //   } else {
-    //     this.items = response.reverse();
-    //     console.log(response.reverse())
-    //   }
-    // },
-    // async loadPNA() {
-    //   let data = {
-    //     email: localStorage.getItem("email")
-
-    //   };
-    //   let response = await Advert.allAdverts('-PNA');
-    //   if (response.err) {
-    //     console.log("Empty my_adverts list");
-    //   } else {
-    //     this.items = response.reverse();
-    //     console.log(response.reverse())
-    //   }
-    // },
-
-    // async loadPSO() {
-    //   let data = {
-    //     email: localStorage.getItem("email")
-
-    //   };
-    //   let response = await Advert.allAdverts('-PSO');
-    //   if (response.err) {
-    //     console.log("Empty my_adverts list");
-    //   } else {
-    //     this.items = response.reverse();
-    //     console.log(response.reverse())
-    //   }
-    // },
     onClickSeeAll() {
       this.itemsPerPage = this.itemsPerPage === 4 ? this.my_adverts.length : 12
     },

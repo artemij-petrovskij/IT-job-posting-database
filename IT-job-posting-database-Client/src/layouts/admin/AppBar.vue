@@ -9,8 +9,10 @@
     <!-- <v-btn class="auth" to="/logged"> Каталог </v-btn>
 
     <v-btn class="auth" to="/create-advert"> Подать объявление </v-btn> -->
-    <v-btn class="auth" to="/admin-edit">Все данные </v-btn>
+    <!-- <v-btn class="auth" to="/admin-edit">Все данные </v-btn> -->
+    <v-btn class="auth" to="/create-company">Добавить компанию </v-btn>
 
+<v-btn class="auth" to="/create-company">Добавить категорию </v-btn>
     <v-btn class="auth" to="/admin"> Панель администратора </v-btn>
     <v-btn class="auth" @click="logout()"> Выйти </v-btn>
 

@@ -15,12 +15,14 @@
 
 
 
-              <v-card class="mx-auto " style="padding-left: 40px;">
+              <v-card class="mx-auto " >
                 {{ companies.length === 0 ? "У вас еще нет откликов" : "" }}
-
-                <v-card variant="tonal" title="" class="mx-auto">
                   <v-list lines="one">
+
+
                     <v-list-item v-for="(item, i) in companies" :key="i" subtitle="">
+                                      <v-card variant="tonal" title="" class="mx-auto">
+
                       <v-chip v-if="item.coverLetter === 'На рассмотрении'" color="primary" variant="flat">
                         {{ item.coverLetter }}
                       </v-chip>
@@ -35,9 +37,14 @@
                       <v-spacer>Отклик на вакансию: {{ item.title }}</v-spacer>
                       <v-spacer>Статус: {{ item.coverLetter }}</v-spacer>
                       <v-divider></v-divider>
+                  
+                         </v-card>
                     </v-list-item>
+
+                    
+                
+             
                   </v-list>
-                </v-card>
 
               </v-card>
 
