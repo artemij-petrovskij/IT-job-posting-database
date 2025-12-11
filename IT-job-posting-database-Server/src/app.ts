@@ -8,17 +8,18 @@ import AuthRouter from "./routes/auth.route";
 
 import ResumeRouter from "./routes/resume.route";
 
+import VacancyRouter from "./routes/vacancy.route";
+
+import UserRouter from "./routes/user.route";
+
+
+import ReportRouter from "./routes/report.route";
+
 //const swaggerUi = require('swagger-ui-express');
 import swaggerUi from 'swagger-ui-express';
 //const swaggerDocument = require('./swagger.json');
 import swaggerDocument from './swagger.json'
 
-
-
-
-import VacancyRouter from "./routes/vacancy.route";
-
-import ReportRouter from "./routes/report.route";
 import { connectDB } from "./models";
 
 require('dotenv').config()
@@ -33,6 +34,9 @@ const resumeRouter = new ResumeRouter()
 
 const vacancyRouter = new VacancyRouter()
 
+const userRouter = new UserRouter()
+
+
 const reportRouter = new ReportRouter()
 
 app.use(cors())
@@ -42,6 +46,7 @@ app.use(bodyParser.json())
 app.use("/api/resume", resumeRouter.getRouter());
 app.use("/api/vacancy", vacancyRouter.getRouter());
 app.use("/auth", authRouter.getRouter());
+app.use("/user", userRouter.getRouter());
 app.use("/report", reportRouter.getRouter());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));

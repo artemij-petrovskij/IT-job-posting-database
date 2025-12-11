@@ -191,6 +191,7 @@ export default {
     show: false,
     shows: false,
     roleId: '',
+    companyId: '',
 
 
     search_field: '',
@@ -350,11 +351,14 @@ export default {
         email: localStorage.getItem("email"),
       };
       let response = await Vacancy.allVacancies(data);
+      console.log("XXXXXXXXXXXX")
+      console.log(response)
       if (response.err) {
         console.log("Empty my_adverts list");
       } else {
 
         this.roleId = response.roleId
+        this.companyId = response.companyId
 
         const data = response.vacancies
         //console.log(response.vacancies)
@@ -380,6 +384,8 @@ export default {
 
       } {
         localStorage.setItem("roleId", response.roleId)
+        localStorage.setItem("companyId", response.companyId)
+
       }
 
 

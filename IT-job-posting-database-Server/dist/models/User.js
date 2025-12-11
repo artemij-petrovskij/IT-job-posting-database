@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const Role_1 = require("./Role");
+const Company_1 = require("./Company");
 let User = class User extends sequelize_typescript_1.Model {
 };
 exports.User = User;
@@ -32,6 +33,15 @@ __decorate([
     (0, sequelize_typescript_1.BelongsTo)(() => Role_1.Role),
     __metadata("design:type", Role_1.Role)
 ], User.prototype, "role", void 0);
+__decorate([
+    (0, sequelize_typescript_1.ForeignKey)(() => Company_1.Company),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.INTEGER, allowNull: true }),
+    __metadata("design:type", Number)
+], User.prototype, "companyId", void 0);
+__decorate([
+    (0, sequelize_typescript_1.BelongsTo)(() => Company_1.Company),
+    __metadata("design:type", Company_1.Company)
+], User.prototype, "company", void 0);
 exports.User = User = __decorate([
     sequelize_typescript_1.Table
 ], User);

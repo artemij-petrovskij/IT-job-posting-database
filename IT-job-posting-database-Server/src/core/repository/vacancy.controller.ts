@@ -64,7 +64,8 @@ class VacancyController implements IVacancy {
       const role = await User.findOne({ where: { firstName: req.body.email } });
 
       const roleId = await role.roleId
-      console.log(req.body.email)
+      const companyId = await role.companyId
+
       const categories = await Category.findAll()
       const feebacks = await Feedback.findAll({
         include: [
@@ -105,19 +106,23 @@ class VacancyController implements IVacancy {
         include: [
           {
             model: Vacancy,
-            attributes: ['title'], // Забираем только title из Category
+            attributes: ['title'], 
           },
 
           {
             model: User,
-            attributes: ['firstName', 'lastName'], // Забираем только title из Category
+            attributes: ['firstName', 'lastName'], 
+          },
+          {
+            model: Company,
+            attributes: ['name'], 
           },
         ],
-        attributes: ['vacancyId', 'coverLetter', 'updatedAt'], // Выбираем только нужные поля из Vacancy
+        attributes: ['vacancyId', 'coverLetter', 'updatedAt','companyId'], 
       });
 
 
-      res.status(200).json({ vacancies, categories, companies, roleId, applications, feebacks });
+      res.status(200).json({ vacancies, categories, companies, roleId, companyId, applications, feebacks });
 
     } catch (error) {
       console.error(error);
@@ -219,7 +224,7 @@ class VacancyController implements IVacancy {
       const {
         email,
         vacancyId,
-
+        companyId
       } = req.body;
       const target = await this.getIdByEmail(email)
 
@@ -233,6 +238,7 @@ class VacancyController implements IVacancy {
         const newApplication = await Application.create({
           coverLetter: "На рассмотрении",
           vacancyId: vacancyId,
+          companyId:companyId,
           userId: target
 
         });
@@ -251,8 +257,10 @@ class VacancyController implements IVacancy {
 
   async getReplies(req: Request, res: Response, next: NextFunction): Promise<any> {
     console.log(req.body)
+    console.log("Делаю отклик")
+    console.log()
     const applications = await Application.findAll({
-      //where: { userId: 1 },
+      where: { companyId: req.body.companyId },
       include: [
         {
           model: Vacancy,
@@ -263,6 +271,11 @@ class VacancyController implements IVacancy {
           model: User,
           attributes: ['firstName', 'lastName'], // Забираем только title из Category
         },
+
+        {
+          model: Company,
+          attributes: ['name','id'], // Забираем только title из Company
+        }
       ],
       attributes: ['vacancyId', 'coverLetter', 'updatedAt', 'userId'], // Выбираем только нужные поля из Vacancy
     });

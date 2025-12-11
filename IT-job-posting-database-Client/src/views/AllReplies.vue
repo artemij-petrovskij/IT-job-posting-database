@@ -8,7 +8,7 @@
             <!-- <v-main style="height: 1800px" class="ma-10 xs"> -->
             <v-main>
               <h1 style="padding:40px;" class="text-h4 font-weight-bold d-flex justify-space-between mb-4 align-center">
-                <div class="text-truncate">Отклики</div>
+                <div class="text-truncate">Отклики {{ companyId }}</div>
 
 
               </h1>
@@ -32,7 +32,8 @@
                       </v-chip>
 
                       {{ formatDate(item.updatedAt) }}
-                      <v-spacer> Пользователь {{ item.email }} - Отклик на вакансию: {{ item.title }}</v-spacer>
+                      <v-spacer> Пользователь {{ item.email }} - Отклик на вакансию: {{ item.title }} КОМПАНИЯ {{
+                        item.company }}</v-spacer>
                       <br>
 
 
@@ -46,13 +47,9 @@
                           @click="changeStatus(item.coverLetter, item.userId, 'Отказ', item.vacancyId)">Отказ</v-btn>
                       </v-bottom-navigation>
 
-
-
                       <v-divider>
 
-
                       </v-divider>
-
 
                       <v-spacer></v-spacer>
                     </v-list-item>
@@ -87,6 +84,7 @@ export default {
     dialog: false,
     overlay: true,
     username: localStorage.getItem("email"),
+    companyId: localStorage.getItem("companyId"),
     show: false,
     shows: false,
     roleId: '',
@@ -132,6 +130,7 @@ export default {
     async loadMyAdverts() {
       let data = {
         email: localStorage.getItem("email"),
+        companyId: localStorage.getItem("companyId"),
       };
       let response = await Vacancy.allVacancies(data);
       let response2 = await Vacancy.getReplies(data);
@@ -146,17 +145,20 @@ export default {
 
       }
 
-      //this.items = response.vacancies.reverse();
-      console.log(response2)
-      console.log(1)
+
+
       const res = response2
-      const categoriesId = res.map((x) => {
-        return {
-          'coverLetter': x.coverLetter, "id": x.id, "desc": x.description, "title": x.vacancy.title, "updatedAt": x.updatedAt, 'email': x.user.firstName
-          , 'vacancyId': x.vacancyId, 'userId': x.userId
-        }
-      });
-      this.companies = categoriesId
+      console.log(res)
+      const applications = res
+        .map((x) => {
+          return {
+            'coverLetter': x.coverLetter, "id": x.id, "desc": x.description, "title": x.vacancy.title, "updatedAt": x.updatedAt, 'email': x.user.firstName
+            , 'vacancyId': x.vacancyId, 'userId': x.userId, 'company': x.company.name
+          }
+        });
+      
+      this.companies = applications
+
       setTimeout(() => { this.show = true }, 300);
     },
 
@@ -171,11 +173,6 @@ export default {
 
     },
   },
-
-
-
-
-
 
   beforeCreate() {
 

@@ -1,4 +1,5 @@
 "use strict";
+//import { initDatabase } from '../../db';
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,82 +9,144 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
-const user_model_1 = __importDefault(require("../../model/user.model"));
+const User_1 = require("../../models/User");
+const Resume_1 = require("../../models/Resume");
+const models_1 = require("../../models");
 class UserController {
+    getIdByEmail(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const target = yield User_1.User.findOne({ where: { firstName: email } });
+            if (target === null) {
+                console.log('Not found!');
+            }
+            else {
+                const target_id = target.id;
+                return target_id;
+            }
+        });
+    }
     getUsers(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const user = yield user_model_1.default.findAll();
-                res.status(200).json(user);
+                models_1.sequelize.sync();
+                const users = yield User_1.User.findAll();
+                res.status(200).json(users);
             }
-            catch (err) {
-                res.status(500);
-            }
-        });
-    }
-    getOneUser(req, res, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { id } = req.params;
-            const user = yield user_model_1.default.findOne({ where: { id: id } });
-            if (user !== null) {
-                res.status(200).json(user);
-            }
-            else {
-                res.status(404).json(`User with id: ${id} does not exist`);
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ "error": "An error occurred while updating the Item" });
             }
         });
     }
-    createUser(req, res, next) {
+    updateCompany(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { email, password } = req.body;
-            yield user_model_1.default.create({
-                email: email,
-                password: password
-            });
-            res.status(201).send(`User with email: ${email} created successfully`);
+            console.log(req.body);
+            const { userId } = req.body;
+            const target = yield User_1.User.findOne({ where: { id: req.body.userId } });
+            if (target) {
+                target.companyId = req.body.companyId;
+                yield target.save();
+            }
+            res.status(200).json("success");
         });
     }
-    deleteUser(req, res, next) {
+    //////////// DELETE
+    getCurrentResumes(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { id } = req.params;
-            const checkUserIsset = yield user_model_1.default.findOne({ where: { id: id } });
-            if (checkUserIsset !== null) {
-                yield user_model_1.default.destroy({
+            try {
+                const { email } = req.body;
+                const target = yield this.getIdByEmail(email);
+                const users = yield Resume_1.Resume.findAll({
                     where: {
-                        id: id,
+                        userId: target,
                     },
                 });
-                res.status(201).send("User deleted successfully");
+                //console.log(target)
+                res.status(200).json(users);
             }
-            else {
-                res.status(404).send(`User with id: ${id} does not exist`);
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ "error": "An error occurred while loading the Items" });
             }
         });
     }
-    updateUser(req, res, next) {
+    getOneAdvert(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { email, password } = req.body;
-            const { id } = req.params;
-            const checkUserIsset = yield user_model_1.default.findOne({ where: { id: id } });
-            if (checkUserIsset !== null) {
-                yield user_model_1.default.update({
-                    email: email,
-                    password: password,
-                }, {
+            try {
+                const resume = yield Resume_1.Resume.findOne({ where: { id: req.params.id } });
+                console.log(resume);
+                res.json(resume);
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ "error": "An error occurred while loading the Item" });
+            }
+        });
+    }
+    createResume(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            //await Resume.sync({ alter: true });
+            try {
+                const { title, skills, salary, description, contacts, email, categoryId } = req.body;
+                const target = yield this.getIdByEmail(email);
+                console.log(req.body);
+                const newResume = yield Resume_1.Resume.create({
+                    title: title,
+                    skills: skills,
+                    salary: salary,
+                    description: description,
+                    contacts: contacts,
+                    categoryId: categoryId,
+                    userId: target
+                });
+                Resume_1.Resume.sync({ alter: true });
+                res.status(201).send({ "success": `Data object created successfully` });
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ "error": "An error occurred while updating the Item" });
+            }
+        });
+    }
+    deleteAdvert(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log(req.params.id);
+                yield Resume_1.Resume.destroy({
                     where: {
-                        id: id,
+                        id: req.params.id,
                     },
                 });
-                res.status(200).send(`User with id: ${id} was updated successfully`);
+                res.status(200).json({ "OK": "Item deleted succefully" });
             }
-            else {
-                res.status(404).send(`User with id: ${id} not found`);
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ "error": "An error occurred while deleting the Item" });
             }
+        });
+    }
+    updateAdvert(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // try {
+            //   const { id, type, file, date, creator, modifeir } = req.body;
+            //   const Item = await TTN.findOneAndUpdate({
+            //     _id: req.params.id,
+            //   }, {
+            //     id: id,
+            //     type: type,
+            //     file: file,
+            //     date: date,
+            //     creator: creator,
+            //     modifeir: modifeir,
+            //   });
+            //   console.log({ "success": `Item updated successfully` });
+            //   res.status(200).json({ "success": `Item updated successfully` });
+            // } catch (error) {
+            //   console.error(error);
+            //   res.status(500).json({ "error": "An error occurred while updating the Item" });
+            // }
         });
     }
 }

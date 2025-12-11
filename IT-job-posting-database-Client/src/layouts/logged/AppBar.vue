@@ -77,9 +77,9 @@
         <v-btn class="auth" to="/applicants" color="deep-orange-accent-4">
           Резюме
         </v-btn>
-        <v-btn class="auth" to="/create-category">
+        <!-- <v-btn class="auth" to="/create-category">
           Категории
-        </v-btn>
+        </v-btn> -->
         <!-- <v-btn class="auth" @click="logout()">
           Выйти
         </v-btn> -->
@@ -106,9 +106,9 @@
             <v-btn block variant="text" to="/applicants">
               Резюме
             </v-btn>
-            <v-btn block variant="text" to="/create-category">
+            <!-- <v-btn block variant="text" to="/create-category">
               Категории
-            </v-btn>
+            </v-btn> -->
             <v-divider></v-divider>
           </div>
 
@@ -137,6 +137,7 @@ export default {
       localStorage.removeItem("jwt");
       localStorage.removeItem("email");
       localStorage.removeItem("roleId");
+      localStorage.removeItem("companyId");
       this.$router.push("/");
     },
   },

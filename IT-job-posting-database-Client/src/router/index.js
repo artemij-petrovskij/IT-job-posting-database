@@ -89,7 +89,7 @@ const routes = [
 
   {
     path: '/create-category',
-    component: () => import('@/layouts/logged/Default.vue'),
+    component: () => import('@/layouts/admin/Default.vue'),
     children: [
       {
         path: '',
@@ -108,6 +108,18 @@ const routes = [
         path: '',
         name: 'Add company',
         component: () => import('@/views/Create-company.vue'),
+      },
+    ],
+  },
+
+    {
+    path: '/assign-users',
+    component: () => import('@/layouts/admin/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'assign users',
+        component: () => import('@/views/Assign-users.vue'),
       },
     ],
   },

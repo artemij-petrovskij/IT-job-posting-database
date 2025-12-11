@@ -1,6 +1,6 @@
 import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from "sequelize-typescript";
 import { Role } from "./Role";
-
+import { Company } from "./Company";
 
 @Table
 export class User extends Model {
@@ -19,4 +19,11 @@ export class User extends Model {
 
   @BelongsTo(() => Role)
   role!: Role;
+//
+  @ForeignKey(() => Company)
+  @Column({ type: DataType.INTEGER, allowNull: true })
+  companyId!: number;
+
+  @BelongsTo(() => Company)
+  company!: Company;
 }

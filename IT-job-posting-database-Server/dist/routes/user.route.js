@@ -4,20 +4,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const { authenticateToken } = require('../middleware/auth.middleware');
 const user_controller_1 = require("../core/repository/user.controller");
+const { authenticateToken } = require('../middleware/auth.middleware');
 class UserRouter {
     constructor() {
         this.router = express_1.default.Router();
-        this.user = new user_controller_1.UserController();
+        this.resume = new user_controller_1.UserController();
         this.initRoutes();
     }
     initRoutes() {
-        this.router.get('/user', this.user.getUsers.bind(this.user));
-        this.router.get('/user/:id', authenticateToken, this.user.getOneUser.bind(this.user));
-        this.router.post('/user', this.user.createUser.bind(this.user));
-        this.router.delete('/user/:id', this.user.deleteUser.bind(this.user));
-        this.router.put('/user/:id', this.user.updateUser.bind(this.user));
+        this.router.get('/users', this.resume.getUsers.bind(this.resume));
+        this.router.post('/update', this.resume.updateCompany.bind(this.resume));
     }
     getRouter() {
         return this.router;

@@ -4,24 +4,19 @@
       <div v-if="show" class="my-box">
         <v-card>
           <v-layout>
-
             <!-- <v-main style="height: 1800px" class="ma-10 xs"> -->
             <v-main>
               <h1 style="padding:40px;" class="text-h4 font-weight-bold d-flex justify-space-between mb-4 align-center">
                 <div class="text-truncate">Мои отклики</div>
-
-
               </h1>
 
-
-
-              <v-card class="mx-auto " >
+              <v-card class="mx-auto ">
                 {{ companies.length === 0 ? "У вас еще нет откликов" : "" }}
-                  <v-list lines="one">
+                <v-list lines="one">
 
 
-                    <v-list-item v-for="(item, i) in companies" :key="i" subtitle="">
-                                      <v-card variant="tonal" title="" class="mx-auto">
+                  <v-list-item v-for="(item, i) in companies" :key="i" subtitle="">
+                    <v-card variant="tonal" title="" class="mx-auto">
 
                       <v-chip v-if="item.coverLetter === 'На рассмотрении'" color="primary" variant="flat">
                         {{ item.coverLetter }}
@@ -37,21 +32,11 @@
                       <v-spacer>Отклик на вакансию: {{ item.title }}</v-spacer>
                       <v-spacer>Статус: {{ item.coverLetter }}</v-spacer>
                       <v-divider></v-divider>
-                  
-                         </v-card>
-                    </v-list-item>
 
-                    
-                
-             
-                  </v-list>
-
+                    </v-card>
+                  </v-list-item>
+                </v-list>
               </v-card>
-
-
-
-
-
             </v-main>
           </v-layout>
         </v-card>
@@ -75,7 +60,6 @@ export default {
     show: false,
     shows: false,
     roleId: '',
-
 
     search_field: '',
     search_value: '',

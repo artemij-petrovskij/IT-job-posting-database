@@ -52,7 +52,7 @@ class VacancyController {
             try {
                 const role = yield User_1.User.findOne({ where: { firstName: req.body.email } });
                 const roleId = yield role.roleId;
-                console.log(req.body.email);
+                const companyId = yield role.companyId;
                 const categories = yield Category_1.Category.findAll();
                 const feebacks = yield Feedback_1.Feedback.findAll({
                     include: [
@@ -87,16 +87,20 @@ class VacancyController {
                     include: [
                         {
                             model: Vacancy_1.Vacancy,
-                            attributes: ['title'], // Забираем только title из Category
+                            attributes: ['title'],
                         },
                         {
                             model: User_1.User,
-                            attributes: ['firstName', 'lastName'], // Забираем только title из Category
+                            attributes: ['firstName', 'lastName'],
+                        },
+                        {
+                            model: Company_1.Company,
+                            attributes: ['name'],
                         },
                     ],
-                    attributes: ['vacancyId', 'coverLetter', 'updatedAt'], // Выбираем только нужные поля из Vacancy
+                    attributes: ['vacancyId', 'coverLetter', 'updatedAt', 'companyId'],
                 });
-                res.status(200).json({ vacancies, categories, companies, roleId, applications, feebacks });
+                res.status(200).json({ vacancies, categories, companies, roleId, companyId, applications, feebacks });
             }
             catch (error) {
                 console.error(error);
@@ -179,7 +183,7 @@ class VacancyController {
     createReply(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { email, vacancyId, } = req.body;
+                const { email, vacancyId, companyId } = req.body;
                 const target = yield this.getIdByEmail(email);
                 console.log(req.body);
                 const exOrNot = yield Application_1.Application.findOne({ where: { userId: target, vacancyId: vacancyId } });
@@ -188,6 +192,7 @@ class VacancyController {
                     const newApplication = yield Application_1.Application.create({
                         coverLetter: "На рассмотрении",
                         vacancyId: vacancyId,
+                        companyId: companyId,
                         userId: target
                     });
                     res.status(201).send({ "success": `Вы откликнулись на вакансию` });
@@ -205,8 +210,10 @@ class VacancyController {
     getReplies(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log(req.body);
+            console.log("Делаю отклик");
+            console.log();
             const applications = yield Application_1.Application.findAll({
-                //where: { userId: 1 },
+                where: { companyId: req.body.companyId },
                 include: [
                     {
                         model: Vacancy_1.Vacancy,
@@ -216,6 +223,10 @@ class VacancyController {
                         model: User_1.User,
                         attributes: ['firstName', 'lastName'], // Забираем только title из Category
                     },
+                    {
+                        model: Company_1.Company,
+                        attributes: ['name', 'id'], // Забираем только title из Company
+                    }
                 ],
                 attributes: ['vacancyId', 'coverLetter', 'updatedAt', 'userId'], // Выбираем только нужные поля из Vacancy
             });
