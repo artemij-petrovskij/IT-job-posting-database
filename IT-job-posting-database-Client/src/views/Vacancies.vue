@@ -251,21 +251,11 @@ export default {
         this.snackbar_title_text = "Предупреждение"
         this.snackbar_text = response.warning
       }
-
       // if (response.err) {
       //   console.log(1)
-
-
       // } else {
       //   console.log(2)
-
       // }
-
-
-
-
-
-
     },
 
 
@@ -292,7 +282,6 @@ export default {
             }))
               .sort((a, b) => b.salary - a.salary); // Сортируем по возрастанию
           };
-
           this.items = filterBySalaryAsc(data);
         }
 
@@ -312,8 +301,6 @@ export default {
             }))
               .sort((a, b) => a.salary - b.salary); // Сортируем по возрастанию
           };
-
-
 
           this.items = filterBySalaryAsc(data);
         }
@@ -359,7 +346,7 @@ export default {
 
         this.roleId = response.roleId
         this.companyId = response.companyId
-
+        this.companyName = response.companyName
         const data = response.vacancies
         //console.log(response.vacancies)
 
@@ -374,7 +361,7 @@ export default {
           };
         });
         this.items = vacanciesWithCheck.reverse();
-        console.log(this.items)
+
 
 
       }
@@ -385,6 +372,10 @@ export default {
       } {
         localStorage.setItem("roleId", response.roleId)
         localStorage.setItem("companyId", response.companyId)
+        if (response.companyName) {
+          localStorage.setItem("companyName", response.companyName.name)
+
+        }
 
       }
 

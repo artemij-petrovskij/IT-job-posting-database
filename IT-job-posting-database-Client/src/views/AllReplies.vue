@@ -141,14 +141,13 @@ export default {
         this.items = response.vacancies.reverse();
         this.roleId = response.roleId
 
-        const data = response.vacancies
 
       }
 
 
 
       const res = response2
-      console.log(res)
+
       const applications = res
         .map((x) => {
           return {
@@ -156,7 +155,7 @@ export default {
             , 'vacancyId': x.vacancyId, 'userId': x.userId, 'company': x.company.name
           }
         });
-      
+
       this.companies = applications
 
       setTimeout(() => { this.show = true }, 300);

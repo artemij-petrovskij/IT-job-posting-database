@@ -53,6 +53,10 @@ class VacancyController {
                 const role = yield User_1.User.findOne({ where: { firstName: req.body.email } });
                 const roleId = yield role.roleId;
                 const companyId = yield role.companyId;
+                const companyName = yield Company_1.Company.findOne({
+                    where: { Id: companyId },
+                    attributes: ['name']
+                });
                 const categories = yield Category_1.Category.findAll();
                 const feebacks = yield Feedback_1.Feedback.findAll({
                     include: [
@@ -100,7 +104,7 @@ class VacancyController {
                     ],
                     attributes: ['vacancyId', 'coverLetter', 'updatedAt', 'companyId'],
                 });
-                res.status(200).json({ vacancies, categories, companies, roleId, companyId, applications, feebacks });
+                res.status(200).json({ vacancies, categories, companies, roleId, companyId, applications, feebacks, companyName });
             }
             catch (error) {
                 console.error(error);

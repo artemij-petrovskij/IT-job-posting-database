@@ -29,7 +29,7 @@
                       </v-chip>
 
                       {{ formatDate(item.updatedAt) }}
-                      <v-spacer>Отклик на вакансию: {{ item.title }}</v-spacer>
+                      <v-spacer>Отклик на вакансию: {{ item.title }} в компанию {{ item.company }}</v-spacer>
                       <v-spacer>Статус: {{ item.coverLetter }}</v-spacer>
                       <v-divider></v-divider>
 
@@ -98,7 +98,7 @@ export default {
       //this.items = response.vacancies.reverse();
       console.log(response)
       const categoriesId = response.applications.map((x) => {
-        return { 'coverLetter': x.coverLetter, "id": x.id, "desc": x.description, "title": x.vacancy.title, "updatedAt": x.updatedAt }
+        return { 'coverLetter': x.coverLetter, "id": x.id, "desc": x.description, "title": x.vacancy.title, "company": x.company.name, "updatedAt": x.updatedAt }
       });
       this.companies = categoriesId
       setTimeout(() => { this.show = true }, 300);

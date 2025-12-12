@@ -5,9 +5,9 @@
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
     </template>
 
-    <v-app-bar-title>IT-Вакансии</v-app-bar-title>
+    <v-app-bar-title>IT-Вакансии {{ companyName }}</v-app-bar-title>
 
- <template v-slot:append v-if="hr_mode">
+    <template v-slot:append v-if="hr_mode">
       <!-- Кнопки, которые видны только на больших экранах -->
       <div class="desktop-buttons d-none d-md-flex">
         <v-btn class="auth" to="/vacancies" color="deep-orange-accent-4">
@@ -62,7 +62,7 @@
       </v-menu>
     </template>
 
-        <template v-slot:append v-if="user_mode">
+    <template v-slot:append v-if="user_mode">
       <!-- Кнопки, которые видны только на больших экранах -->
       <div class="desktop-buttons d-none d-md-flex">
         <v-btn class="auth" to="/vacancies" color="deep-orange-accent-4">
@@ -130,7 +130,8 @@ export default {
 
     admin: false,
     current_user: localStorage.getItem("email"),
-    role: localStorage.getItem("roleId")
+    role: localStorage.getItem("roleId"),
+    companyName: localStorage.getItem("companyName")
   }),
   methods: {
     logout() {
@@ -138,6 +139,7 @@ export default {
       localStorage.removeItem("email");
       localStorage.removeItem("roleId");
       localStorage.removeItem("companyId");
+      localStorage.removeItem("companyName");
       this.$router.push("/");
     },
   },

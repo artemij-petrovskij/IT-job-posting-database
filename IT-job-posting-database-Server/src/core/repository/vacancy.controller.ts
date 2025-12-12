@@ -58,13 +58,19 @@ class VacancyController implements IVacancy {
 
   async getVacancies(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
-
-
-
       const role = await User.findOne({ where: { firstName: req.body.email } });
 
       const roleId = await role.roleId
       const companyId = await role.companyId
+
+
+
+      const companyName = await Company.findOne({
+        where: { Id: companyId }, 
+        attributes: ['name']
+
+      });
+
 
       const categories = await Category.findAll()
       const feebacks = await Feedback.findAll({
@@ -96,8 +102,6 @@ class VacancyController implements IVacancy {
         attributes: ['id', 'title', 'description', 'salary', 'requirements', 'location'], // Выбираем только нужные поля из Vacancy
       });
 
-
-
       const replies = await this.getIdByEmail(req.body.email)
       console.log(replies)
 
@@ -106,23 +110,23 @@ class VacancyController implements IVacancy {
         include: [
           {
             model: Vacancy,
-            attributes: ['title'], 
+            attributes: ['title'],
           },
 
           {
             model: User,
-            attributes: ['firstName', 'lastName'], 
+            attributes: ['firstName', 'lastName'],
           },
           {
             model: Company,
-            attributes: ['name'], 
+            attributes: ['name'],
           },
         ],
-        attributes: ['vacancyId', 'coverLetter', 'updatedAt','companyId'], 
+        attributes: ['vacancyId', 'coverLetter', 'updatedAt', 'companyId'],
       });
 
 
-      res.status(200).json({ vacancies, categories, companies, roleId, companyId, applications, feebacks });
+      res.status(200).json({ vacancies, categories, companies, roleId, companyId, applications, feebacks, companyName });
 
     } catch (error) {
       console.error(error);
@@ -238,7 +242,7 @@ class VacancyController implements IVacancy {
         const newApplication = await Application.create({
           coverLetter: "На рассмотрении",
           vacancyId: vacancyId,
-          companyId:companyId,
+          companyId: companyId,
           userId: target
 
         });
@@ -274,7 +278,7 @@ class VacancyController implements IVacancy {
 
         {
           model: Company,
-          attributes: ['name','id'], // Забираем только title из Company
+          attributes: ['name', 'id'], // Забираем только title из Company
         }
       ],
       attributes: ['vacancyId', 'coverLetter', 'updatedAt', 'userId'], // Выбираем только нужные поля из Vacancy
