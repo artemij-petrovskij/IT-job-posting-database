@@ -23,6 +23,7 @@ class VacancyRouter {
         this.router.post('/company-feedback', this.resume.companyFeedback.bind(this.resume));
         this.router.post('/current-vacancies', this.resume.getCurrentVacancies.bind(this.resume));
         this.router.get('/vacancy/:id', this.resume.getOneVacancy.bind(this.resume));
+        this.router.get('/vacancies/:id', this.resume.getOneCompany.bind(this.resume));
         this.router.delete('/advert/:id', this.resume.deleteVacancy.bind(this.resume));
         this.router.put('/advert/:id', this.resume.updateVacancy.bind(this.resume));
     }

@@ -79,6 +79,12 @@ class Vacancy {
         }
     }
 
+    static getOneCompany = async (id) => {
+        const response = await fetch(`http://localhost:8080/api/vacancy/vacancies/${id}`);
+        return await response.json()
+    }
+
+
     static createCategory = async (body) => {
         try {
 

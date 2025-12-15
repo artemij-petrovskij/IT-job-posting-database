@@ -4,6 +4,8 @@
 
     <default-view />
   </v-app>
+  <v-footer border>It-job-posting-database</v-footer>
+
 </template>
 
 <script setup>

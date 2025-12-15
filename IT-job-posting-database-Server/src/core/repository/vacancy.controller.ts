@@ -15,8 +15,11 @@ interface IVacancy {
   getVacancies(req: Request, res: Response, next: NextFunction): Promise<any>;
   getCurrentVacancies(req: Request, res: Response, next: NextFunction): Promise<any>;
   getOneVacancy(req: Request, res: Response, next: NextFunction): Promise<any>;
+  
   createVacancy(req: Request, res: Response, next: NextFunction): Promise<any>;
   createCompany(req: Request, res: Response, next: NextFunction): Promise<any>;
+  getOneCompany(req: Request, res: Response, next: NextFunction): Promise<any>;
+
   createCategory(req: Request, res: Response, next: NextFunction): Promise<any>;
 
   createReply(req: Request, res: Response, next: NextFunction): Promise<any>;
@@ -207,6 +210,25 @@ class VacancyController implements IVacancy {
     } catch (error) {
       console.error(error);
       res.status(500).json({ "error": "An error occurred while updating the Item" });
+    }
+  }
+
+  async getOneCompany(req: Request, res: Response, next: NextFunction): Promise<any> {
+
+    try {
+      const resume = await Company.findOne({
+        where: { id: req.params.id }, include: [
+          {
+            model: Vacancy,
+            attributes: ['id','title','description','salary',  'requirements','location','date'],
+          },
+        ],
+      });
+      console.log(resume)
+      res.json(resume)
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ "error": "An error occurred while loading the Item" });
     }
   }
 

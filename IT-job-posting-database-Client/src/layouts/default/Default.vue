@@ -3,6 +3,7 @@
     <default-bar />
 
     <default-view />
+
   </v-app>
 </template>
 

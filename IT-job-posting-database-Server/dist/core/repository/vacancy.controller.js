@@ -175,6 +175,26 @@ class VacancyController {
             }
         });
     }
+    getOneCompany(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const resume = yield Company_1.Company.findOne({
+                    where: { id: req.params.id }, include: [
+                        {
+                            model: Vacancy_1.Vacancy,
+                            attributes: ['id', 'title', 'description', 'salary', 'requirements', 'location', 'date'],
+                        },
+                    ],
+                });
+                console.log(resume);
+                res.json(resume);
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ "error": "An error occurred while loading the Item" });
+            }
+        });
+    }
     createCategory(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

@@ -209,6 +209,18 @@ const routes = [
     ],
   },
 
+  {
+    path: '/vacancy-of-company',
+    component: () => import('@/layouts/logged/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'Vacancy-of-company',
+        component: () => import('@/views/Vacancy-of-company.vue'),
+      },
+    ],
+  },
+
 
 ]
 
