@@ -118,7 +118,14 @@ class VacancyController {
     getOneVacancy(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const resume = yield Vacancy_1.Vacancy.findOne({ where: { id: req.params.id } });
+                const resume = yield Vacancy_1.Vacancy.findOne({
+                    where: { id: req.params.id }, include: [
+                        {
+                            model: Company_1.Company,
+                            attributes: ['name'],
+                        },
+                    ],
+                });
                 console.log(resume);
                 res.json(resume);
             }

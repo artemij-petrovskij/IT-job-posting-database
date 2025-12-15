@@ -6,31 +6,96 @@
 
     <v-fade-transition>
       <div v-if="show" class="my-box">
-        <v-card title="Создать вакансию" class="mx-auto" max-width="700" variant="outlined">
+        <v-card
+          title="Создать вакансию"
+          class="mx-auto"
+          max-width="700"
+          variant="outlined"
+        >
           <v-container class="align-center text-center">
-            <v-form ref="form1" v-model="valid" lazy-validation @submit.prevent="submitForm">
+            <v-form
+              ref="form1"
+              v-model="valid"
+              lazy-validation
+              @submit.prevent="submitForm"
+            >
+              <v-autocomplete
+                v-model="category"
+                @update:modelValue="getCategoryId()"
+                label="Категория*"
+                :rules="[rules.required]"
+                :items="categories"
+              ></v-autocomplete>
+              <!-- 
+              <v-autocomplete
+                v-model="company"
+                @update:modelValue="getCompanyId()"
+                label="Компания*"
+                :rules="[rules.required]"
+                :items="companies"
+              ></v-autocomplete> -->
 
-              <v-autocomplete v-model="category" @update:modelValue="getCategoryId()" label="Категория*"
-                :rules="[rules.required]" :items="categories"></v-autocomplete>
-              <v-autocomplete v-model="company" @update:modelValue="getCompanyId()" label="Компания*"
-                :rules="[rules.required]" :items="companies"></v-autocomplete>
+              <v-autocomplete
+               disabled
+                v-model="companyName"
+                label="Компания*"
+                :rules="[rules.required]"
+                :items="companies"
+              ></v-autocomplete>
 
-              <v-text-field v-model="title" label="Название вакансии*" :rules="[rules.required]" hide-details required>
+              <v-text-field
+                v-model="title"
+                label="Название вакансии*"
+                :rules="[rules.required]"
+                hide-details
+                required
+              >
               </v-text-field>
 
-              <v-text-field v-model="description" label="Описание*" :rules="[rules.required]" hide-details required>
+              <v-text-field
+                v-model="description"
+                label="Описание*"
+                :rules="[rules.required]"
+                hide-details
+                required
+              >
               </v-text-field>
 
-              <v-text-field v-model="salary" label="Заработная плата" hide-details required>
+              <v-text-field
+                v-model="salary"
+                label="Заработная плата"
+                hide-details
+                required
+              >
               </v-text-field>
 
-
-
-              <v-autocomplete v-model="requirements" label="Опыт работы*" :rules="[rules.required]"
-                :items="['Не имеет значения', 'Нет опыта', 'От 1 года до 3 лет', 'От 3 до 6 лет', 'Более 6 лет']"></v-autocomplete>
+              <v-autocomplete
+                v-model="requirements"
+                label="Опыт работы*"
+                :rules="[rules.required]"
+                :items="[
+                  'Не имеет значения',
+                  'Нет опыта',
+                  'От 1 года до 3 лет',
+                  'От 3 до 6 лет',
+                  'Более 6 лет',
+                ]"
+              ></v-autocomplete>
               {{ location }}
-              <v-autocomplete v-model="location" label="Местанохождение" :rules="[rules.required]"
-                :items="['Минск', 'Минская область', 'Брест', 'Витебск', 'Гомель', 'Гродно', 'Могилев']"></v-autocomplete>
+              <v-autocomplete
+                v-model="location"
+                label="Местанохождение"
+                :rules="[rules.required]"
+                :items="[
+                  'Минск',
+                  'Минская область',
+                  'Брест',
+                  'Витебск',
+                  'Гомель',
+                  'Гродно',
+                  'Могилев',
+                ]"
+              ></v-autocomplete>
 
               <v-btn class="mt-5" color="success" type="submit" :disabled="!valid" block>
                 Создать вакансию
@@ -41,33 +106,27 @@
             <v-snackbar v-model="snackbar"> {{ snackbarMessage }}</v-snackbar>
           </v-container>
         </v-card>
-
-
       </div>
     </v-fade-transition>
-
   </v-container>
 </template>
 
 <script>
 import { Vacancy } from "../services/vacancy.service.js";
-import { ref } from 'vue'
-
+import { ref } from "vue";
 
 // const step = ref(1)
 // const items = ref(['Aasf', 'B', 'C'])
 // const textInput = ref()
 
-
-
 export default {
   data: () => ({
-
     categoryId: 1,
-    companyId: 1,
+    companyId: localStorage.getItem("companyId"),
+    companyName: localStorage.getItem("companyName"),
     //form data
     step: ref(1),
-    items: ref(['Выберите компанию', 'Выберите категорию', 'C']),
+    items: ref(["Выберите компанию", "Выберите категорию", "C"]),
     textInput: ref(),
 
     categories: [], // all categories
@@ -87,7 +146,6 @@ export default {
     requirements: "",
     location: "",
 
-   
     show: false,
     valid: false,
     valid2: false,
@@ -101,14 +159,11 @@ export default {
     snackbarMessage: "",
   }),
   methods: {
-
     validate() {
-      if (this.textInput != 'x') {
-        this.step--
+      if (this.textInput != "x") {
+        this.step--;
       } else {
-
       }
-
     },
     submitForm() {
       if (this.valid) {
@@ -119,16 +174,16 @@ export default {
     async getCategoryId(e) {
       const array = this.categories;
       const found = array.find((element) => {
-        return element.title == this.category
+        return element.title == this.category;
       });
-      this.categoryId = found.id
+      this.categoryId = found.id;
     },
     async getCompanyId(e) {
       const array = this.companies;
       const found = array.find((element) => {
-        return element.title == this.company
+        return element.title == this.company;
       });
-      this.companyId = found.id
+      this.companyId = found.id;
     },
 
     async loadMyAdverts() {
@@ -142,20 +197,20 @@ export default {
         //this.items = response.vacancies.reverse();
 
         const categoriesId = response.categories.map((x) => {
-          return { 'title': x.name, "id": x.id }
+          return { title: x.name, id: x.id };
         });
-        this.categories = categoriesId
+        this.categories = categoriesId;
 
         const companiesId = response.companies.map((x) => {
-          return { 'title': x.name, "id": x.id }
+          return { title: x.name, id: x.id };
         });
 
-        this.companies = companiesId
-        setTimeout(() => { this.show = true }, 300);
+        this.companies = companiesId;
+        setTimeout(() => {
+          this.show = true;
+        }, 300);
 
-
-        console.log(companiesId)
-
+        console.log(companiesId);
       }
     },
 
@@ -165,7 +220,7 @@ export default {
           title: this.title,
           description: this.description,
           categoryId: this.categoryId,
-          companyId: this.companyId,
+          companyId: localStorage.getItem("companyId"),
           description: this.description,
           salary: this.salary,
           requirements: this.requirements,
@@ -196,8 +251,6 @@ export default {
       }
     },
   },
-
-
 
   beforeCreate() {
     if (localStorage.getItem("jwt") == null) {

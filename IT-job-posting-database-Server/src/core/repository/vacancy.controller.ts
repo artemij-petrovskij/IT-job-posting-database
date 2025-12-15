@@ -66,7 +66,7 @@ class VacancyController implements IVacancy {
 
 
       const companyName = await Company.findOne({
-        where: { Id: companyId }, 
+        where: { Id: companyId },
         attributes: ['name']
 
       });
@@ -137,7 +137,14 @@ class VacancyController implements IVacancy {
   async getOneVacancy(req: Request, res: Response, next: NextFunction): Promise<any> {
 
     try {
-      const resume = await Vacancy.findOne({ where: { id: req.params.id } });
+      const resume = await Vacancy.findOne({
+        where: { id: req.params.id }, include: [
+          {
+            model: Company,
+            attributes: ['name'],
+          },
+        ],
+      });
       console.log(resume)
       res.json(resume)
     } catch (error) {

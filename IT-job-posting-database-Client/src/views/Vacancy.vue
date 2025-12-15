@@ -8,10 +8,7 @@
       <v-card class="mx-auto my-8" variant="outlined">
         <v-card-item>
           <v-card-title>
-
-            <div class="text-h4 text-left">{{ current_advert.title }} </div>
-
-
+            <div class="text-h4 text-left">{{ current_advert.title }}</div>
           </v-card-title>
           <v-card-subtitle>
             <p class="text-h5 text-left">Заработная плата: {{ current_advert.salary }}</p>
@@ -21,10 +18,13 @@
         </v-card-item>
 
         <v-card-text>
-          <p class="text-h6 text-left">Требуемый опыт: {{ current_advert.requirements }}</p>
+          <p class="text-h6 text-left">
+            Требуемый опыт: {{ current_advert.requirements }}
+          </p>
 
-          <p class="text-body-1 text-left">Местанахождение: {{ current_advert.location }}</p>
-
+          <p class="text-body-1 text-left">
+            Местанахождение: {{ current_advert.location }}
+          </p>
         </v-card-text>
         <v-card-item>
           <p class="text-body-1 text-left">Описание: {{ current_advert.description }}</p>
@@ -35,7 +35,7 @@
           ></v-img> -->
         </v-card-item>
 
-        <!--  <v-card-title> Характеристики </v-card-title>
+        <v-card-title> Характеристики </v-card-title>
         <v-table>
           <tbody>
             <tr>
@@ -63,7 +63,7 @@
               <td class="text-left">{{ current_advert.color }}</td>
             </tr>
           </tbody>
-        </v-table> -->
+        </v-table>
       </v-card>
     </v-responsive>
   </v-container>
@@ -82,9 +82,48 @@ export default {
       console.log(id);
       let response = await Vacancy.getOneVacancy(id);
       this.current_advert = response;
+      console.log(response)
     },
-  },
+    //async loadMyAdverts() {
+    //   let data = {
+    //     email: localStorage.getItem("email"),
+    //   };
+    //   let response = await Vacancy.allVacancies(data);
+    //   console.log(response);
+    //   if (response.err) {
+    //     console.log("Empty my_adverts list");
+    //   } else {
+    //     this.roleId = response.roleId;
+    //     this.companyId = response.companyId;
+    //     this.companyName = response.companyName;
+    //     const data = response.vacancies;
+    //     //console.log(response.vacancies)
 
+    //     const vacancies = response.vacancies;
+    //     const applications = response.applications;
+    //     const vacanciesWithCheck = vacancies.map((vacancy) => {
+    //       const isMatched = applications.some((app) => app.vacancyId === vacancy.id);
+    //       return {
+    //         ...vacancy,
+    //         check: isMatched,
+    //       };
+    //     });
+    //     this.items = vacanciesWithCheck.reverse();
+    //   }
+
+    //   if (localStorage.getItem("roleId") == null) {
+    //     location.reload();
+    //   }
+    //   {
+    //     localStorage.setItem("roleId", response.roleId);
+    //     localStorage.setItem("companyId", response.companyId);
+    //     if (response.companyName) {
+    //       localStorage.setItem("companyName", response.companyName.name);
+    //     }
+    //   }
+    // },
+    // },
+  },
   async created() {
     await this.loadAdvert();
   },

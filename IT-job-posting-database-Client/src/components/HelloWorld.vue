@@ -1,6 +1,5 @@
-<template class="bg-red">
-  <v-container class="fill-height bg-red-lighten-5" style="background: rgb(255,105,105);
-background: radial-gradient(circle, rgba(255,105,105,1) 0%, rgba(255,255,255,1) 68%);">
+<template class="bg-red" >
+  <v-container class="fill-height bg-red-lighten-5" style="background-image: url('../public/main.png');  border-radius:25px;background-size:cover;">
     <div class="text-h3 bg-red">IT Вакансии для каждого!</div>
     <v-row>
       <v-col cols="12" md="4">
