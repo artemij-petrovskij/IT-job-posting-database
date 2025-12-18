@@ -25,7 +25,7 @@
             <v-divider></v-divider>
 
             <v-responsive class="mx-auto pt-8" max-width="800">
-              <v-text-field
+              <v-text-field 
                 v-model="search_field"
                 label="Поиск"
                 clearable
@@ -44,6 +44,7 @@
               </v-radio-group>
 
               <v-autocomplete
+                clearable
                 v-model="category"
                 @update:modelValue="getCategoryId()"
                 label="Категория"
@@ -54,27 +55,33 @@
         </v-expand-transition>
       </v-card>
 
-      <v-card v-if="items.length != 0 && search_field == ''" class="mx-auto" variant="text" max-width="900">
+      <v-card
+        v-if="items.length != 0 && search_field === ''"
+        class="mx-auto"
+        variant="text"
+        max-width="900"
+      >
         <h3
           class="text-h6 font-weight-bold d-flex justify-space-between mb-4 align-center"
         >
-          Найдено вакансий: {{ items.length }} <b v-if="search_field !== ''">
-            по запросу {{search_field}}
-          </b>
+          Найдено вакансий: {{ items.length }}
+          <b v-if="search_field !== ''"> по запросу {{ search_field }} </b>
         </h3>
       </v-card>
 
-      <v-card v-if="items.length != 0 && search_field !== ''" class="mx-auto" variant="text" max-width="900">
+      <v-card
+        v-if="items.length != 0 && search_field.length != 0"
+        class="mx-auto"
+        variant="text"
+        max-width="900"
+      >
         <h3
           class="text-h6 font-weight-bold d-flex justify-space-between mb-4 align-center"
         >
-          Найдено вакансий: {{ items.length }} по запросу "{{search_field}}"
-       
+          Найдено вакансий: {{ items.length }} по запросу "{{ search_field }}"
         </h3>
       </v-card>
 
-      
-  
       <v-card v-if="items.length == 0" class="mx-auto" variant="text" max-width="900">
         <h3
           class="text-h6 font-weight-bold d-flex justify-space-between mb-4 align-center"

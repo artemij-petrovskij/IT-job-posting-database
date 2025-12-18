@@ -63,7 +63,7 @@ class ResumeController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const resume = yield Resume_1.Resume.findOne({ where: { id: req.params.id } });
-                console.log(resume);
+                // console.log(resume)
                 res.json(resume);
             }
             catch (error) {
@@ -88,6 +88,40 @@ class ResumeController {
                     categoryId: categoryId,
                     userId: target
                 });
+                Resume_1.Resume.sync({ alter: true });
+                res.status(201).send({ "success": `Data object created successfully` });
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ "error": "An error occurred while updating the Item" });
+            }
+        });
+    }
+    updateResume(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { title, skills, salary, description, contacts, email, categoryId, resumeId } = req.body;
+                const target = yield this.getIdByEmail(email);
+                const resume = yield Resume_1.Resume.findOne({ where: { id: resumeId } });
+                if (resume) {
+                    resume.title = req.body.title;
+                    resume.skills = req.body.skills;
+                    resume.salary = req.body.salary;
+                    resume.description = req.body.description;
+                    resume.contacts = req.body.contacts;
+                    resume.categoryId = req.body.categoryId;
+                    resume.userId = target;
+                    yield resume.save();
+                }
+                // const newResume = await Resume.create({
+                //   title: title,
+                //   skills: skills,
+                //   salary: salary,
+                //   description: description,
+                //   contacts: contacts,
+                //   categoryId: categoryId,
+                //   userId: target
+                // });
                 Resume_1.Resume.sync({ alter: true });
                 res.status(201).send({ "success": `Data object created successfully` });
             }

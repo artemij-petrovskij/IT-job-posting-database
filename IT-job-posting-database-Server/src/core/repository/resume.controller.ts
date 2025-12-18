@@ -70,7 +70,7 @@ class ResumeController implements IResume {
 
     try {
       const resume = await Resume.findOne({ where: { id: req.params.id } });
-      console.log(resume)
+      // console.log(resume)
       res.json(resume)
     } catch (error) {
       console.error(error);
@@ -104,6 +104,56 @@ class ResumeController implements IResume {
         userId: target
 
       });
+      Resume.sync({ alter: true })
+
+
+      res.status(201).send({ "success": `Data object created successfully` });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ "error": "An error occurred while updating the Item" });
+    }
+  }
+
+  async updateResume(req: Request, res: Response, next: NextFunction): Promise<any> {
+    try {
+      const {
+        title,
+        skills,
+        salary,
+        description,
+        contacts,
+        email,
+        categoryId,
+        resumeId
+      } = req.body;
+
+      const target = await this.getIdByEmail(email)
+      
+      const resume = await Resume.findOne({ where: { id: resumeId } });
+      if (resume) {
+        resume.title = req.body.title
+        resume.skills = req.body.skills
+        resume.salary = req.body.salary
+        resume.description = req.body.description
+        resume.contacts = req.body.contacts
+        resume.categoryId = req.body.categoryId
+        resume.userId = target
+        await resume.save()
+
+      }
+
+
+
+      // const newResume = await Resume.create({
+      //   title: title,
+      //   skills: skills,
+      //   salary: salary,
+      //   description: description,
+      //   contacts: contacts,
+      //   categoryId: categoryId,
+      //   userId: target
+
+      // });
       Resume.sync({ alter: true })
 
 

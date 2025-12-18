@@ -15,6 +15,7 @@ class ResumeRouter {
     initRoutes() {
         this.router.post('/adverts', this.resume.getResumes.bind(this.resume));
         this.router.put('/advert', this.resume.createResume.bind(this.resume));
+        this.router.post('/advert', this.resume.updateResume.bind(this.resume));
         this.router.post('/my-adverts', this.resume.getCurrentResumes.bind(this.resume));
         this.router.get('/advert/:id', this.resume.getOneAdvert.bind(this.resume));
         this.router.delete('/advert/:id', this.resume.deleteAdvert.bind(this.resume));

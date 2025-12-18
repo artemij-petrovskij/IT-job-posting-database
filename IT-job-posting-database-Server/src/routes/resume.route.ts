@@ -17,11 +17,14 @@ class ResumeRouter implements Routes {
     constructor() {
         this.initRoutes();
     }
- 
+
     initRoutes() {
         this.router.post('/adverts', this.resume.getResumes.bind(this.resume));
 
         this.router.put('/advert', this.resume.createResume.bind(this.resume));
+
+        this.router.post('/advert', this.resume.updateResume.bind(this.resume));
+
 
         this.router.post('/my-adverts', this.resume.getCurrentResumes.bind(this.resume));
 

@@ -87,6 +87,18 @@ const routes = [
     ],
   },
 
+    {
+    path: '/edit-resume',
+    component: () => import('@/layouts/logged/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'Edit resume',
+        component: () => import('@/views/Edit-resume.vue'),
+      },
+    ],
+  },
+
   {
     path: '/create-category',
     component: () => import('@/layouts/admin/Default.vue'),
