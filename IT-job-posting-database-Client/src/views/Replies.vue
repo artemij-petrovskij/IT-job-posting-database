@@ -1,26 +1,28 @@
 <template>
   <v-responsive>
-    <v-fade-transition>
-      <div v-if="show" class="my-box">
-        <v-layout>
-          <v-main>
-            <h1
-              style="padding: 40px"
-              class="text-h4 font-weight-bold d-flex justify-space-between align-center"
-            >
-              <div class="text-truncate">Мои отклики</div>
-            </h1>
+    <v-layout>
+      <v-main class="mx-3 py-5">
+        <v-card class="mx-auto" variant="text" max-width="900">
+          <h3
+            class="text-h4 font-weight-bold d-flex justify-space-between mb-4 align-center"
+          >
+            Мои отклики
+          </h3>
+        </v-card>
 
-            <v-card class="mx-auto ">
+        <v-fade-transition>
+          <div v-if="show" class="my-box">
+            <v-card
+              border
+              class="mx-auto mb-5"
+              variant="text"
+              rounded="lg"
+              max-width="900"
+            >
               {{ companies.length === 0 ? "У вас еще нет откликов" : "" }}
               <v-list>
                 <v-list-item v-for="(item, i) in companies" :key="i" subtitle="">
-                  <v-card
-                    title=""
-                    max-width="1200"
-                    variant="outlined"
-                    class="mx-auto wrap"
-                  >
+                  <v-card title="" max-width="1200" border class="mx-auto wrap">
                     <v-card-text>
                       <p>
                         <v-chip
@@ -46,9 +48,19 @@
                         </v-chip>
                       </p>
 
-                      <p class="text-h6 font-weight-black">
-                        Отклик на вакансию: {{ item.title }} в компанию
-                        {{ item.company }}
+                      <p class="text-h6">
+                        Отклик на вакансию: <a
+                          :href="`/vacancy?id=${item.vacancyId}`"
+                          target="_blank"
+                        >
+                          {{ item.title }}</a
+                        > в компанию -
+                        <a
+                          :href="`/vacancy-of-company?id=${item.companyId}`"
+                          target="_blank"
+                        >
+                          {{ item.company }}</a
+                        >
                       </p>
 
                       <p class="text-h7">
@@ -63,10 +75,10 @@
                 </v-list-item>
               </v-list>
             </v-card>
-          </v-main>
-        </v-layout>
-      </div>
-    </v-fade-transition>
+          </div>
+        </v-fade-transition>
+      </v-main>
+    </v-layout>
   </v-responsive>
 </template>
 
@@ -127,9 +139,12 @@ export default {
           desc: x.description,
           title: x.vacancy.title,
           company: x.company.name,
+          companyId: x.companyId,
+          vacancyId: x.vacancyId,
           updatedAt: x.updatedAt,
         };
       });
+      console.log(response.applications);
       this.companies = categoriesId.reverse();
       setTimeout(() => {
         this.show = true;

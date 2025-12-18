@@ -42,9 +42,45 @@
                 <v-radio :value="3" label="По убыванию зарплат"></v-radio>
                 <v-radio :value="4" label="По возрастанию зарплат"></v-radio>
               </v-radio-group>
+
+              <v-autocomplete
+                v-model="category"
+                @update:modelValue="getCategoryId()"
+                label="Категория"
+                :items="categories"
+              ></v-autocomplete>
             </v-responsive>
           </div>
         </v-expand-transition>
+      </v-card>
+
+      <v-card v-if="items.length != 0 && search_field == ''" class="mx-auto" variant="text" max-width="900">
+        <h3
+          class="text-h6 font-weight-bold d-flex justify-space-between mb-4 align-center"
+        >
+          Найдено вакансий: {{ items.length }} <b v-if="search_field !== ''">
+            по запросу {{search_field}}
+          </b>
+        </h3>
+      </v-card>
+
+      <v-card v-if="items.length != 0 && search_field !== ''" class="mx-auto" variant="text" max-width="900">
+        <h3
+          class="text-h6 font-weight-bold d-flex justify-space-between mb-4 align-center"
+        >
+          Найдено вакансий: {{ items.length }} по запросу "{{search_field}}"
+       
+        </h3>
+      </v-card>
+
+      
+  
+      <v-card v-if="items.length == 0" class="mx-auto" variant="text" max-width="900">
+        <h3
+          class="text-h6 font-weight-bold d-flex justify-space-between mb-4 align-center"
+        >
+          По вашему запросу ничего не найдено
+        </h3>
       </v-card>
 
       <v-fade-transition>
@@ -63,7 +99,7 @@
                     :title="item.raw.name"
                     :href="`/vacancy?id=${item.raw.id}&company=${item.raw.company.name}&companyId=${item.raw.company.id}&description=${item.raw.company.description}`"
                     density="comfortable"
-                    target="blank"
+                    target="_blank"
                     lines="two"
                     subtitle=""
                   >
@@ -82,7 +118,7 @@
                     variant="plain"
                     :ripple="false"
                     :href="`vacancy-of-company?id=${item.raw.company.id}`"
-                    target="blank"
+                    target="_blank"
                   >
                     {{ item.raw.company.name }}
                   </v-btn>
@@ -149,7 +185,6 @@
     </v-snackbar>
   </v-responsive>
 </template>
-
 <script>
 //import { search } from "core-js/fn/symbol";
 import { Vacancy } from "../services/vacancy.service.js";
@@ -160,6 +195,7 @@ export default {
   data: () => ({
     page: 1,
     items: [],
+    allItems: [], // Храним ВСЕ загруженные вакансии
     itemsPerPage: 8,
     dialog: false,
     overlay: true,
@@ -168,6 +204,10 @@ export default {
     shows: false,
     roleId: "",
     companyId: "",
+
+    categoryId: null,
+    categories: [],
+    category: "",
 
     search_field: "",
     search_value: "",
@@ -187,23 +227,21 @@ export default {
     page() {
       this.scrollToTop();
     },
+    search_field() {
+      this.applyAllFilters(); // Добавляем отслеживание поля поиска
+    },
   },
 
   methods: {
     scrollToTop() {
-      // Плавная прокрутка к верху страницы
       window.scrollTo({
         top: 0,
         behavior: "smooth",
       });
-
-      // Или к конкретному элементу
-      // if (this.$refs.scrollTarget) {
-      //   this.$refs.scrollTarget.scrollIntoView({ behavior: 'smooth' });
-      // }
     },
+
     handleClick(id) {
-      const currentColor = this.buttonColors[id] || this.getCheckColor(id); // Получаем текущий цвет, если есть, или вычисляем по check
+      const currentColor = this.buttonColors[id] || this.getCheckColor(id);
       this.buttonColors[id] = currentColor === "primary" ? "normal" : "primary";
     },
 
@@ -211,9 +249,9 @@ export default {
       const item = this.getItemById(id);
       return item.raw.check ? "primary" : "normal";
     },
+
     getItemById(id) {
-      // Получение объекта item по id. Пожалуйста, адаптируйте это под свою логику.
-      return { raw: { id, check: false } }; // Пример возвращаемого объекта
+      return this.allItems.find((item) => item.id === id);
     },
 
     async reply(id, companyId) {
@@ -231,7 +269,6 @@ export default {
         this.snackbar = true;
         this.snackbar_title_text = "Успешно";
         this.snackbar_text = response.success;
-        // После успешного отклика гарантируем, что кнопка в состоянии "откликнулся"
         this.buttonColors[id] = "normal";
       }
 
@@ -239,95 +276,98 @@ export default {
         this.snackbar = true;
         this.snackbar_title_text = "Предупреждение";
         this.snackbar_text = response.warning;
-        // Если уже откликались, тоже устанавливаем состояние "откликнулся"
         this.buttonColors[id] = "normal";
       }
     },
 
     async handleButtonClick(item) {
-      // Сохраняем ID для использования в методах
       const id = item.id;
       const companyId = item.company.id;
 
-      // Меняем цвет кнопки сразу для лучшего UX
       const currentColor = this.buttonColors[id] || (item.check ? "primary" : "normal");
       this.buttonColors[id] = currentColor === "primary" ? "normal" : "primary";
 
-      // Выполняем запрос на отклик
       await this.reply(id, companyId);
     },
 
-    async applayFilter() {
-      console.log(this.radios);
-      if (this.radios == 1) {
-        this.loadMyAdverts();
-      } else if (this.radios == 2) {
-      } else if (this.radios == 3) {
-        let data = {
-          email: localStorage.getItem("email"),
-        };
-        let response = await Vacancy.allVacancies(data);
-        if (response.err) {
-          console.log("Empty my_adverts list");
-        } else {
-          const data = response.vacancies;
-          const filterBySalaryAsc = (vacancies) => {
-            return vacancies
-              .map((vacancy) => ({
-                ...vacancy,
-                salary: parseFloat(vacancy.salary.replace(/[^0-9]/g, "")) || 0, // Убираем символы, оставляя только числа
-              }))
-              .sort((a, b) => b.salary - a.salary); // Сортируем по возрастанию
-          };
-          this.items = filterBySalaryAsc(data);
-        }
-      } else if (this.radios == 4) {
-        let data = {
-          email: localStorage.getItem("email"),
-        };
-        let response = await Vacancy.allVacancies(data);
-        if (response.err) {
-          console.log("Empty my_adverts list");
-        } else {
-          const data = response.vacancies;
-          const filterBySalaryAsc = (vacancies) => {
-            return vacancies
-              .map((vacancy) => ({
-                ...vacancy,
-                salary: parseFloat(vacancy.salary.replace(/[^0-9]/g, "")) || 0, // Убираем символы, оставляя только числа
-              }))
-              .sort((a, b) => a.salary - b.salary); // Сортируем по возрастанию
-          };
+    // Новый метод для применения всех фильтров
+    applyAllFilters() {
+      let filteredItems = [...this.allItems];
 
-          this.items = filterBySalaryAsc(data);
-        }
-      } else {
+      // Применяем поиск
+      if (this.search_field && this.search_field.trim() !== "") {
+        const searchTerm = this.search_field.toLowerCase().trim();
+        filteredItems = filteredItems.filter(
+          (item) =>
+            item.title.toLowerCase().includes(searchTerm) ||
+            (item.description && item.description.toLowerCase().includes(searchTerm)) ||
+            (item.company &&
+              item.company.name &&
+              item.company.name.toLowerCase().includes(searchTerm))
+        );
       }
+
+      // Применяем фильтр по категории
+      if (this.categoryId) {
+        filteredItems = filteredItems.filter(
+          (item) => Number(item.category.id) === this.categoryId
+        );
+      }
+
+      // Применяем сортировку
+      if (this.radios) {
+        switch (this.radios) {
+          case 1: // По дате (последние сначала)
+            filteredItems = [...filteredItems].reverse();
+            break;
+          case 2: // По соответствию (здесь можно добавить свою логику)
+            // Пока оставляем без изменений
+            break;
+          case 3: // По убыванию зарплат
+            filteredItems = this.sortBySalary(filteredItems, "desc");
+            break;
+          case 4: // По возрастанию зарплат
+            filteredItems = this.sortBySalary(filteredItems, "asc");
+            break;
+        }
+      }
+
+      this.items = filteredItems;
+    },
+
+    // Метод для сортировки по зарплате
+    sortBySalary(vacancies, order = "asc") {
+      return [...vacancies].sort((a, b) => {
+        const salaryA = parseFloat(a.salary.replace(/[^0-9]/g, "")) || 0;
+        const salaryB = parseFloat(b.salary.replace(/[^0-9]/g, "")) || 0;
+
+        return order === "asc" ? salaryA - salaryB : salaryB - salaryA;
+      });
+    },
+
+    async applayFilter() {
+      this.applyAllFilters();
+    },
+
+    async getCategoryId() {
+      const array = this.categories;
+      const found = array.find((element) => {
+        return element.title == this.category;
+      });
+      this.categoryId = found ? found.id : null;
+      this.applyAllFilters();
     },
 
     async searcher() {
-      let data = {
-        email: localStorage.getItem("email"),
-      };
-      let response = await Vacancy.allVacancies(data);
-      if (response.err) {
-        console.log("Empty my_adverts list");
-      } else {
-        const data = response.vacancies;
-        const filteredData = data.filter((item) =>
-          item.title.toLowerCase().includes(this.search_field)
-        );
-        console.log(filteredData);
-        console.log(this.search_field);
+      this.applyAllFilters();
+    },
 
-        this.items = filteredData;
-      }
-    },
     async searcher_blur() {
-      if (this.search_field == null) {
-        this.loadMyAdverts();
+      if (this.search_field == null || this.search_field.trim() === "") {
+        this.applyAllFilters();
       }
     },
+
     async loadMyAdverts() {
       let data = {
         email: localStorage.getItem("email"),
@@ -341,24 +381,32 @@ export default {
         this.roleId = response.roleId;
         this.companyId = response.companyId;
         this.companyName = response.companyName;
-        const data = response.vacancies;
 
+        const categoriesId = response.categories.map((x) => {
+          return { title: x.name, id: x.id };
+        });
+        this.categories = categoriesId;
+
+        const data = response.vacancies;
         const vacancies = response.vacancies;
         const applications = response.applications;
-        const vacanciesWithCheck = vacancies.map((vacancy) => {
+
+        // Сохраняем все вакансии
+        this.allItems = vacancies.map((vacancy) => {
           const isMatched = applications.some((app) => app.vacancyId === vacancy.id);
           return {
             ...vacancy,
             check: isMatched,
           };
         });
-        this.items = vacanciesWithCheck.reverse();
+
+        // Применяем фильтры к загруженным данным
+        this.applyAllFilters();
       }
 
       if (localStorage.getItem("roleId") == null) {
         location.reload();
-      }
-      {
+      } else {
         localStorage.setItem("roleId", response.roleId);
         localStorage.setItem("companyId", response.companyId);
         if (response.companyName) {
@@ -374,6 +422,7 @@ export default {
     onClickSeeAll() {
       this.itemsPerPage = this.itemsPerPage === 4 ? this.items.length : 4;
     },
+
     async deleteItem(id) {
       this.dialog = false;
       let response = await Advert.loadMyAdvertsTN(id);
@@ -387,6 +436,7 @@ export default {
       this.$router.push("/");
     }
   },
+
   async created() {
     await this.loadMyAdverts();
   },
