@@ -46,7 +46,7 @@ class UserController {
             const { userId } = req.body;
             const target = yield User_1.User.findOne({ where: { id: req.body.userId } });
             if (target) {
-                target.companyId = req.body.companyId;
+                target.companyId = req.body;
                 yield target.save();
             }
             res.status(200).json("success");

@@ -151,6 +151,7 @@ export default {
     }
   },
   async created() {
+    
 
     if (this.role == 2) {
       this.user_mode = true

@@ -17,7 +17,7 @@ class User {
             } else {
                 localStorage.setItem('jwt', data.token);
                 localStorage.setItem('email', body.email);
-                localStorage.setItem('email', body.email);
+                //localStorage.setItem('roleId', body);
                 return data
             }
 

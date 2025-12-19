@@ -21,11 +21,11 @@
         </v-card-actions>
 
         <v-expand-transition>
-          <div v-show="shows">
+          <div v-if="shows">
             <v-divider></v-divider>
 
             <v-responsive class="mx-auto pt-8" max-width="800">
-              <v-text-field 
+              <v-text-field
                 v-model="search_field"
                 label="Поиск"
                 clearable
@@ -54,7 +54,8 @@
           </div>
         </v-expand-transition>
       </v-card>
-
+  <v-fade-transition>
+        <div v-if="show" class="my-box">
       <v-card
         v-if="items.length != 0 && search_field === ''"
         class="mx-auto"
@@ -90,8 +91,7 @@
         </h3>
       </v-card>
 
-      <v-fade-transition>
-        <div v-if="show" class="my-box">
+    
           <v-data-iterator :items="items" :page="page" :items-per-page="4">
             <template v-slot:default="{ items }">
               <template v-for="(item, i) in items" :key="i">
@@ -330,10 +330,10 @@ export default {
           case 2: // По соответствию (здесь можно добавить свою логику)
             // Пока оставляем без изменений
             break;
-          case 3: // По убыванию зарплат
+          case 3:
             filteredItems = this.sortBySalary(filteredItems, "desc");
             break;
-          case 4: // По возрастанию зарплат
+          case 4:
             filteredItems = this.sortBySalary(filteredItems, "asc");
             break;
         }
@@ -409,15 +409,23 @@ export default {
 
         // Применяем фильтры к загруженным данным
         this.applyAllFilters();
-      }
 
-      if (localStorage.getItem("roleId") == null) {
-        location.reload();
-      } else {
-        localStorage.setItem("roleId", response.roleId);
+        // Ключевое изменение: проверяем, совпадает ли роль в localStorage с полученной
+        const storedRole = localStorage.getItem("roleId");
+        const currentRole = response.roleId.toString();
+
+        // Всегда сохраняем данные в localStorage
+        localStorage.setItem("roleId", currentRole);
         localStorage.setItem("companyId", response.companyId);
+
         if (response.companyName) {
           localStorage.setItem("companyName", response.companyName.name);
+        }
+
+        // Если роль изменилась или еще не сохранена - перезагружаем
+        if (storedRole !== currentRole) {
+          // Даем небольшое время для рендеринга данных перед перезагрузкой
+           location.reload();
         }
       }
 

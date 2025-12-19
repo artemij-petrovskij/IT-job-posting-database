@@ -50,7 +50,7 @@ class UserController implements IUser {
     const target = await User.findOne({ where: { id: req.body.userId } });
 
     if (target) {
-      target.companyId = req.body.companyId
+      target.companyId = req.body 
       await target.save()
     }
 

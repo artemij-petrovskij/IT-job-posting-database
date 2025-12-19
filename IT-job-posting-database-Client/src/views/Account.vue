@@ -112,7 +112,7 @@
                             <td></td>
                           </tr>
 
-                          <v-btn variant="outlined" @click="deleteItem(item.raw.id)"
+                          <v-btn variant="outlined" class="my-3 mx-3" @click="deleteItem(item.raw.id)"
                             >Удалить
                           </v-btn>
 
