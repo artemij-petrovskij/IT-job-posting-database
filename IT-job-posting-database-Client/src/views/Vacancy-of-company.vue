@@ -8,16 +8,14 @@
       <h1 class="text-h4 font-weight-bold d-flex justify-space-between mb-4 align-center">
         <div class="text-truncate">Вакансии компании {{ current_company.name }}</div>
       </h1>
-      <v-card class="mx-auto my-8" variant="outlined">
+      <v-card class="mx-auto my-8" border>
         <v-card-item>
         {{ current_company.description }}
           <v-card-title>
-            <div class="text-h4 text-left">{{ current_company.description }}</div>
+            <div class="text-h4 text-left"></div>
           </v-card-title>
           <v-card-subtitle>
-            <p class="text-h5 text-left">{{ current_company.description }}</p>
-
-            <p class="text-caption text-left">Опубликовано:</p>
+          
           </v-card-subtitle>
         </v-card-item>
 
@@ -62,41 +60,7 @@
                 </div>
               </div>
             </h3>
-            <!-- <v-card variant="outlined" class="mx-auto mb-4">
-              <v-card-actions>
-                <v-btn block text=" Поиск и фильтрация" @click="shows = !shows"></v-btn>
-
-                <v-spacer></v-spacer>
-
-                <v-btn :icon="shows ? 'mdi-chevron-up' : 'mdi-chevron-down'"></v-btn>
-              </v-card-actions>
-
-              <v-expand-transition>
-                <div v-show="shows">
-                  <v-divider></v-divider>
-
-                  <v-responsive class="mx-auto pt-8" max-width="800">
-                    <v-text-field
-                      v-model="search_field"
-                      label="Поиск"
-                      clearable
-                      prepend-icon="mdi-magnify"
-                      variant="outlined"
-                      @input="searcher()"
-                      @blur="searcher_blur()"
-                    ></v-text-field>
-
-                    <p>Selected Button: {{ radios }}</p> 
-                    <v-radio-group v-model="radios" inline @change="applayFilter()">
-                      <v-radio :value="1" label="По дате"></v-radio>
-                      <v-radio :value="2" label="По соответствию"></v-radio>
-                      <v-radio :value="3" label="По убыванию зарплат"></v-radio>
-                      <v-radio :value="4" label="По возрастанию зарплат"></v-radio>
-                    </v-radio-group>
-                  </v-responsive>
-                </div>
-              </v-expand-transition>
-            </v-card> -->
+           
           </template>
 
           <template v-slot:default="{ items }">
@@ -219,7 +183,7 @@ export default {
     username: localStorage.getItem("email"),
     show: false,
     shows: false,
-    roleId: "",
+    roleId:localStorage.getItem("roleId"),
     companyId: "",
     search_field: "",
     search_value: "",

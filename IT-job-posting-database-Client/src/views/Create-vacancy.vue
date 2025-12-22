@@ -9,7 +9,7 @@
         <v-card
           title="Создать вакансию"
           class="mx-auto"
-          max-width="700"
+          max-width="900"
           variant="outlined"
         >
           <v-container class="align-center text-center">

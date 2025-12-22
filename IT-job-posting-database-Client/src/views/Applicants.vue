@@ -2,90 +2,104 @@
   <v-responsive>
     <v-card>
       <v-layout>
-        <v-main>
-          <v-data-iterator :items="items" :items-per-page="itemsPerPage" style="padding: 40px">
-            <template v-slot:header="{ page, pageCount, prevPage, nextPage }">
-              <h1 class="text-h4 font-weight-bold d-flex justify-space-between mb-4 align-center">
-                <div class="text-truncate">Резюме</div>
-
-                <div class="d-flex align-center">
-                  <v-btn class="me-8" variant="text" @click="onClickSeeAll">
-                    <span class="text-decoration-underline text-none">Посмотреть все</span>
-                  </v-btn>
-
-                  <div class="d-inline-flex">
-                    <v-btn :disabled="page === 1" class="me-2" icon="mdi-arrow-left" size="small" variant="tonal"
-                      @click="prevPage"></v-btn>
-
-                    <v-btn :disabled="page === pageCount" icon="mdi-arrow-right" size="small" variant="tonal"
-                      @click="nextPage"></v-btn>
-                  </div>
-                </div>
-              </h1>
-            </template>
-
+        <v-main class="mx-3 py-5">
+          <v-card class="mx-auto" variant="text" max-width="900">
+            <h3
+              class="text-h4 font-weight-bold d-flex justify-space-between mb-4 align-center"
+            >
+              Резюме {{items.length}}
+            </h3>
+          </v-card>
+          <v-data-iterator :items="items" :page="page" :items-per-page="5">
             <template v-slot:default="{ items }">
-              <v-row>
+              <template v-for="(item, i) in items" :key="i">
+               <v-card
+                  border
+                  rounded="lg"
+                  elevation="0"
+                  class="mx-auto mb-5"
+                  max-width="900"
+                >
+                  <v-list-item
+                    :title="item.raw.title"
+                    :href="`/vacancy?id=${item.raw.id}&company=${item.raw.title}&companyId=${item.raw.title}&description=${item.raw.title}`"
+                    density="comfortable"
+                    target="_blank"
+                    lines="two"
+                    subtitle=""
+                  >
+                    <template v-slot:title>
+                      <strong class="text-h6">
+                        {{ item.raw.title }}
+                      </strong>
+                    </template>
+                  </v-list-item>
 
-                <v-col v-for="(item, i) in items" :key="i" cols="12" sm="12" xl="3">
-                  <v-sheet border>
+                  <v-list-item>
+                    <v-chip size="small"> Опыт: {{ item.raw.title }} </v-chip>
+                  </v-list-item>
 
+                  <v-btn
+                    variant="plain"
+                    :ripple="false"
+                    :href="`vacancy-of-company?id=${item.raw.title}`"
+                    target="_blank"
+                  >
+                    {{ item.raw.title }}
+                  </v-btn>
+ {{ item.raw }}
+                  <!-- <v-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.</v-card-text> -->
 
-                    <v-list-item :title="item.raw.name" :href="`/applicant?id=${item.raw.id}`" density="comfortable"
-                      lines="two" subtitle="Резюме">
-                      <template v-slot:title>
+                  <v-table class="text-caption" density="compact">
+                    <tbody>
+                      <tr align="right">
+                        <th>
+                          <v-icon icon="mdi-cash" size="large"></v-icon>
+                          {{ item.raw.salary == "" ? "Не указана" : item.raw.salary }}
+                        </th>
+                        <td></td>
+                      </tr>
 
-                        <strong class="text-h6">
-                          {{ item.raw.title }}
-                        </strong>
+                      <tr align="right">
+                        <th>
+                          <v-icon icon="mdi-map-marker" size="large"></v-icon>
+                          {{ item.raw.location }}
+                        </th>
+                    
+                      </tr>
 
-                      </template>
-                    </v-list-item>
+                      <v-btn
+                        rounded="lg"
+                        size="large"
+                        v-if="roleId == '1'"
+                        variant="flat"
+                        class="ma-4"
+                        :color="
+                          buttonColors[item.raw.id] ||
+                          (item.raw.check ? 'normal' : 'primary')
+                        "
+                        @click="handleButtonClick(item.raw)"
+                        :key="item.raw.id"
+                      >
+                        {{
+                          buttonColors[item.raw.id] === "normal" || item.raw.check
+                            ? "Вы откликнулись"
+                            : "Откликнуться"
+                        }}
+                      </v-btn>
+                    </tbody>
+                  </v-table>
+                </v-card>
 
-                    <v-table class="text-caption" density="compact">
-                      <tbody>
-                        <tr align="right">
-                          <th>Нвыки: {{ item.raw.skills }}</th>
-
-                          <td></td>
-                        </tr>
-
-                        <tr align="right">
-                          <th>Описание: {{ item.raw.description }}</th>
-
-                          <td></td>
-                        </tr>
-
-                        <tr align="right">
-                          <th>Желаемая заработная плата: {{ item.raw.salary }}</th>
-
-                          <td></td>
-                        </tr>
-
-
-                        <tr align="right">
-                          <th>Контакты: {{ item.raw.contacts }}</th>
-
-                          <td></td>
-                        </tr>
-
-
-
-                      </tbody>
-                    </v-table>
-                  </v-sheet>
-                </v-col>
-              </v-row>
+                <br />
+              </template>
             </template>
-
-            <template v-slot:footer="{ page, pageCount }">
-              <v-footer class="justify-space-between text-body-2 mt-4" color="surface-variant">
-                Вего резюме: {{ items.length }}
-
-                <div>Страница {{ page }} из {{ pageCount }}</div>
-              </v-footer>
+            <template v-slot:footer="{ pageCount }">
+              <v-pagination v-model="page" :length="pageCount"></v-pagination>
             </template>
           </v-data-iterator>
+
+         
         </v-main>
       </v-layout>
     </v-card>
@@ -93,14 +107,20 @@
 </template>
 
 <script>
+import { ref } from "vue";
 import { Advert } from "../services/advert.service.js";
-
+import { Vacancy } from "../services/vacancy.service.js";
+const page = ref(1);
 export default {
   data: () => ({
+
+    page: 1,
     items: [],
     itemsPerPage: 4,
     dialog: false,
     overlay: true,
+    show: false,
+
     username: localStorage.getItem("email"),
   }),
   methods: {
@@ -115,6 +135,10 @@ export default {
         this.items = response.reverse();
         console.log(response.reverse());
       }
+
+      setTimeout(() => {
+        this.show = true;
+      }, 300);
     },
 
     onClickSeeAll() {
@@ -125,11 +149,6 @@ export default {
       let response = await Advert.loadMyAdvertsTN(id);
       console.log(response);
       await this.loadMyAdverts();
-      // await this.loadTN()
-      // await this.loadPKO()
-      // await this.loadRKO()
-      // await this.loadPNA()
-      // await this.loadPSO()
     },
   },
 

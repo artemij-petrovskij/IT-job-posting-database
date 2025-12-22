@@ -3,8 +3,7 @@
     <v-app-bar-title>
       <v-icon icon="mdi-circle-slice-4" />
 
-      IT ВАКАНСИЙ - ПАНЕЛЬ АДМИНИСТРАТОРА
-
+      IT-Вакансии
     </v-app-bar-title>
     <!-- <v-btn class="auth" to="/logged"> Каталог </v-btn>
 
@@ -18,38 +17,25 @@
 
     <v-btn class="auth" to="/admin"> Панель администратора </v-btn>
     <v-btn class="auth" @click="logout()"> Выйти </v-btn>
-
-
-
   </v-app-bar>
 </template>
 
 <script>
-
 export default {
-  data: () => ({
-
-  }),
+  data: () => ({}),
   methods: {
     logout() {
-      localStorage.removeItem('jwt');
-      localStorage.removeItem('email');
-      localStorage.removeItem('roleId');
-      this.$router.push('/');
-    }
+      localStorage.removeItem("jwt");
+      localStorage.removeItem("email");
+      localStorage.removeItem("roleId");
+      this.$router.push("/");
+    },
   },
 
   beforeCreate() {
-
-
-    if (localStorage.getItem("jwt") == null || localStorage.getItem("email") != 'admin') {
-      this.$router.push('/');
+    if (localStorage.getItem("jwt") == null || localStorage.getItem("email") != "admin") {
+      this.$router.push("/");
     }
   },
-
-
-
 };
-
-
 </script>

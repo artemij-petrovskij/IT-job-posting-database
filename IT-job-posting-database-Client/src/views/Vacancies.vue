@@ -54,44 +54,43 @@
           </div>
         </v-expand-transition>
       </v-card>
-  <v-fade-transition>
+      <v-fade-transition>
         <div v-if="show" class="my-box">
-      <v-card
-        v-if="items.length != 0 && search_field === ''"
-        class="mx-auto"
-        variant="text"
-        max-width="900"
-      >
-        <h3
-          class="text-h6 font-weight-bold d-flex justify-space-between mb-4 align-center"
-        >
-          Найдено вакансий: {{ items.length }}
-          <b v-if="search_field !== ''"> по запросу {{ search_field }} </b>
-        </h3>
-      </v-card>
+          <v-card
+            v-if="items.length != 0 && search_field === ''"
+            class="mx-auto"
+            variant="text"
+            max-width="900"
+          >
+            <h3
+              class="text-h6 font-weight-bold d-flex justify-space-between mb-4 align-center"
+            >
+              Найдено вакансий: {{ items.length }}
+              <b v-if="search_field !== ''"> по запросу {{ search_field }} </b>
+            </h3>
+          </v-card>
 
-      <v-card
-        v-if="items.length != 0 && search_field.length != 0"
-        class="mx-auto"
-        variant="text"
-        max-width="900"
-      >
-        <h3
-          class="text-h6 font-weight-bold d-flex justify-space-between mb-4 align-center"
-        >
-          Найдено вакансий: {{ items.length }} по запросу "{{ search_field }}"
-        </h3>
-      </v-card>
+          <v-card
+            v-if="items.length != 0 && search_field.length != 0"
+            class="mx-auto"
+            variant="text"
+            max-width="900"
+          >
+            <h3
+              class="text-h6 font-weight-bold d-flex justify-space-between mb-4 align-center"
+            >
+              Найдено вакансий: {{ items.length }} по запросу "{{ search_field }}"
+            </h3>
+          </v-card>
 
-      <v-card v-if="items.length == 0" class="mx-auto" variant="text" max-width="900">
-        <h3
-          class="text-h6 font-weight-bold d-flex justify-space-between mb-4 align-center"
-        >
-          По вашему запросу ничего не найдено
-        </h3>
-      </v-card>
+          <v-card v-if="items.length == 0" class="mx-auto" variant="text" max-width="900">
+            <h3
+              class="text-h6 font-weight-bold d-flex justify-space-between mb-4 align-center"
+            >
+              По вашему запросу ничего не найдено
+            </h3>
+          </v-card>
 
-    
           <v-data-iterator :items="items" :page="page" :items-per-page="4">
             <template v-slot:default="{ items }">
               <template v-for="(item, i) in items" :key="i">
@@ -425,7 +424,7 @@ export default {
         // Если роль изменилась или еще не сохранена - перезагружаем
         if (storedRole !== currentRole) {
           // Даем небольшое время для рендеринга данных перед перезагрузкой
-           location.reload();
+          location.reload();
         }
       }
 
