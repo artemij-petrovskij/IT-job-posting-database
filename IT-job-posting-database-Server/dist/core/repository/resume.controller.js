@@ -89,7 +89,8 @@ class ResumeController {
                     userId: target
                 });
                 Resume_1.Resume.sync({ alter: true });
-                res.status(201).send({ "success": `Data object created successfully` });
+                console.log(newResume);
+                res.status(201).send({ "success": `Resume object created successfully` });
             }
             catch (error) {
                 console.error(error);
@@ -113,17 +114,8 @@ class ResumeController {
                     resume.userId = target;
                     yield resume.save();
                 }
-                // const newResume = await Resume.create({
-                //   title: title,
-                //   skills: skills,
-                //   salary: salary,
-                //   description: description,
-                //   contacts: contacts,
-                //   categoryId: categoryId,
-                //   userId: target
-                // });
                 Resume_1.Resume.sync({ alter: true });
-                res.status(201).send({ "success": `Data object created successfully` });
+                res.status(201).send({ "success": `Resume object edited successfully` });
             }
             catch (error) {
                 console.error(error);
@@ -150,24 +142,6 @@ class ResumeController {
     }
     updateAdvert(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            // try {
-            //   const { id, type, file, date, creator, modifeir } = req.body;
-            //   const Item = await TTN.findOneAndUpdate({
-            //     _id: req.params.id,
-            //   }, {
-            //     id: id,
-            //     type: type,
-            //     file: file,
-            //     date: date,
-            //     creator: creator,
-            //     modifeir: modifeir,
-            //   });
-            //   console.log({ "success": `Item updated successfully` });
-            //   res.status(200).json({ "success": `Item updated successfully` });
-            // } catch (error) {
-            //   console.error(error);
-            //   res.status(500).json({ "error": "An error occurred while updating the Item" });
-            // }
         });
     }
 }

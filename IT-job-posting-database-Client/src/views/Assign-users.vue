@@ -515,6 +515,7 @@ export default {
                 
                 // Загружаем пользователей
                 const usersResponse = await User.allUsers(data);
+                console.log(usersResponse)
                 this.users = Array.isArray(usersResponse) ? usersResponse : [];
                 
                 // Загружаем компании

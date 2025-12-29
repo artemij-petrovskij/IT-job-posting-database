@@ -17,27 +17,7 @@ import { Feedback } from '../../models/Feedback';
 
 class ReportController {
     async getReport(req: Request, res: Response): Promise<any> {
-        // async getIdByEmail(email: any): Promise<any> {
-        //     const target = await User.findOne({ where: { firstName: email } });
-        //     if (target === null) {
-        //         console.log('Not found!');
-        //     } else {
-        //         const target_id = target.id
-        //         return 1
-        //     }
-        // }
-
-
-        // async getIdByCompany(company: any): Promise<any> {
-        //     const target = await Company.findOne({ where: { id: company } });
-        //     if (target === null) {
-        //         console.log('Not found!');
-        //     } else {
-        //         const target_id = target.id
-        //         return target_id
-        //     }
-        // }
-
+    
 
 
 

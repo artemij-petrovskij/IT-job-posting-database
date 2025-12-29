@@ -27,6 +27,20 @@ const routes = [
       },
     ],
   },
+
+    {
+    path: '/waiting-for-company',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'WaitingForCompany',
+        component: () => import('@/views/WaitingForCompany.vue'),
+      },
+    ],
+  },
+
+  
   {
     path: '/applicants',
     component: () => import('@/layouts/logged/Default.vue'),

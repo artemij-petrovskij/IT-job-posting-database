@@ -4,9 +4,7 @@
 
     <v-main class="mx-3 py-5">
       <v-card class="mx-auto" variant="text" max-width="900">
-        <h3
-          class="text-h4 font-weight-bold d-flex justify-space-between mb-4 align-center"
-        >
+        <h3 class="text-h4 font-weight-bold d-flex justify-space-between mb-4 align-center">
           Вакансии
         </h3>
       </v-card>
@@ -25,15 +23,8 @@
             <v-divider></v-divider>
 
             <v-responsive class="mx-auto pt-8" max-width="800">
-              <v-text-field
-                v-model="search_field"
-                label="Поиск"
-                clearable
-                prepend-icon="mdi-magnify"
-                variant="outlined"
-                @input="searcher()"
-                @blur="searcher_blur()"
-              ></v-text-field>
+              <v-text-field v-model="search_field" label="Поиск" clearable prepend-icon="mdi-magnify" variant="outlined"
+                @input="searcher()" @blur="searcher_blur()"></v-text-field>
 
               <!-- <p>Selected Button: {{ radios }}</p> -->
               <v-radio-group v-model="radios" inline @change="applayFilter()">
@@ -43,50 +34,29 @@
                 <v-radio :value="4" label="По возрастанию зарплат"></v-radio>
               </v-radio-group>
 
-              <v-autocomplete
-                clearable
-                v-model="category"
-                @update:modelValue="getCategoryId()"
-                label="Категория"
-                :items="categories"
-              ></v-autocomplete>
+              <v-autocomplete clearable v-model="category" @update:modelValue="getCategoryId()" label="Категория"
+                :items="categories"></v-autocomplete>
             </v-responsive>
           </div>
         </v-expand-transition>
       </v-card>
       <v-fade-transition>
         <div v-if="show" class="my-box">
-          <v-card
-            v-if="items.length != 0 && search_field === ''"
-            class="mx-auto"
-            variant="text"
-            max-width="900"
-          >
-            <h3
-              class="text-h6 font-weight-bold d-flex justify-space-between mb-4 align-center"
-            >
+          <v-card v-if="items.length != 0 && search_field === ''" class="mx-auto" variant="text" max-width="900">
+            <h3 class="text-h6 font-weight-bold d-flex justify-space-between mb-4 align-center">
               Найдено вакансий: {{ items.length }}
               <b v-if="search_field !== ''"> по запросу {{ search_field }} </b>
             </h3>
           </v-card>
 
-          <v-card
-            v-if="items.length != 0 && search_field.length != 0"
-            class="mx-auto"
-            variant="text"
-            max-width="900"
-          >
-            <h3
-              class="text-h6 font-weight-bold d-flex justify-space-between mb-4 align-center"
-            >
+          <v-card v-if="items.length != 0 && search_field.length != 0" class="mx-auto" variant="text" max-width="900">
+            <h3 class="text-h6 font-weight-bold d-flex justify-space-between mb-4 align-center">
               Найдено вакансий: {{ items.length }} по запросу "{{ search_field }}"
             </h3>
           </v-card>
 
           <v-card v-if="items.length == 0" class="mx-auto" variant="text" max-width="900">
-            <h3
-              class="text-h6 font-weight-bold d-flex justify-space-between mb-4 align-center"
-            >
+            <h3 class="text-h6 font-weight-bold d-flex justify-space-between mb-4 align-center">
               По вашему запросу ничего не найдено
             </h3>
           </v-card>
@@ -94,21 +64,10 @@
           <v-data-iterator :items="items" :page="page" :items-per-page="4">
             <template v-slot:default="{ items }">
               <template v-for="(item, i) in items" :key="i">
-                <v-card
-                  border
-                  rounded="lg"
-                  elevation="0"
-                  class="mx-auto mb-5"
-                  max-width="900"
-                >
-                  <v-list-item
-                    :title="item.raw.name"
+                <v-card border rounded="lg" elevation="0" class="mx-auto mb-5" max-width="900">
+                  <v-list-item :title="item.raw.name"
                     :href="`/vacancy?id=${item.raw.id}&company=${item.raw.company.name}&companyId=${item.raw.company.id}&description=${item.raw.company.description}`"
-                    density="comfortable"
-                    target="_blank"
-                    lines="two"
-                    subtitle=""
-                  >
+                    density="comfortable" target="_blank" lines="two" subtitle="">
                     <template v-slot:title>
                       <strong class="text-h6">
                         {{ item.raw.title }}
@@ -120,12 +79,8 @@
                     <v-chip size="small"> Опыт: {{ item.raw.requirements }} </v-chip>
                   </v-list-item>
 
-                  <v-btn
-                    variant="plain"
-                    :ripple="false"
-                    :href="`vacancy-of-company?id=${item.raw.company.id}`"
-                    target="_blank"
-                  >
+                  <v-btn variant="plain" :ripple="false" :href="`vacancy-of-company?id=${item.raw.company.id}`"
+                    target="_blank">
                     {{ item.raw.company.name }}
                   </v-btn>
 
@@ -149,19 +104,9 @@
                         <td></td>
                       </tr>
 
-                      <v-btn
-                        rounded="lg"
-                        size="large"
-                        v-if="roleId == '1'"
-                        variant="flat"
-                        class="ma-4"
-                        :color="
-                          buttonColors[item.raw.id] ||
-                          (item.raw.check ? 'normal' : 'primary')
-                        "
-                        @click="handleButtonClick(item.raw)"
-                        :key="item.raw.id"
-                      >
+                      <v-btn rounded="lg" size="large" v-if="roleId == '1'" variant="flat" class="ma-4" :color="buttonColors[item.raw.id] ||
+                        (item.raw.check ? 'normal' : 'primary')
+                        " @click="handleButtonClick(item.raw)" :key="item.raw.id">
                         {{
                           buttonColors[item.raw.id] === "normal" || item.raw.check
                             ? "Вы откликнулись"
@@ -300,7 +245,7 @@ export default {
     applyAllFilters() {
       let filteredItems = [...this.allItems];
 
-      // Применяем поиск
+
       if (this.search_field && this.search_field.trim() !== "") {
         const searchTerm = this.search_field.toLowerCase().trim();
         filteredItems = filteredItems.filter(
@@ -406,14 +351,11 @@ export default {
           };
         });
 
-        // Применяем фильтры к загруженным данным
         this.applyAllFilters();
 
-        // Ключевое изменение: проверяем, совпадает ли роль в localStorage с полученной
         const storedRole = localStorage.getItem("roleId");
         const currentRole = response.roleId.toString();
 
-        // Всегда сохраняем данные в localStorage
         localStorage.setItem("roleId", currentRole);
         localStorage.setItem("companyId", response.companyId);
 
@@ -421,11 +363,28 @@ export default {
           localStorage.setItem("companyName", response.companyName.name);
         }
 
-        // Если роль изменилась или еще не сохранена - перезагружаем
-        if (storedRole !== currentRole) {
+      
+
+
+        const companyName = response.companyName
+
+        if (companyName === null && currentRole == 2) {
+          this.$router.push("/waiting-for-company");
+
+          ///waiting-for-company
+        }
+        console.log(companyName)
+        console.log(currentRole)
+
+
+
+  if (storedRole !== currentRole) {
           // Даем небольшое время для рендеринга данных перед перезагрузкой
           location.reload();
         }
+
+
+
       }
 
       setTimeout(() => {

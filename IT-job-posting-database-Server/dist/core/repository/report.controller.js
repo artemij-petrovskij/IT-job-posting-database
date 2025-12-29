@@ -25,24 +25,6 @@ const Feedback_1 = require("../../models/Feedback");
 class ReportController {
     getReport(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            // async getIdByEmail(email: any): Promise<any> {
-            //     const target = await User.findOne({ where: { firstName: email } });
-            //     if (target === null) {
-            //         console.log('Not found!');
-            //     } else {
-            //         const target_id = target.id
-            //         return 1
-            //     }
-            // }
-            // async getIdByCompany(company: any): Promise<any> {
-            //     const target = await Company.findOne({ where: { id: company } });
-            //     if (target === null) {
-            //         console.log('Not found!');
-            //     } else {
-            //         const target_id = target.id
-            //         return target_id
-            //     }
-            // }
             const categories = yield Category_1.Category.findAll();
             const feebacks = yield Feedback_1.Feedback.findAll({
                 include: [

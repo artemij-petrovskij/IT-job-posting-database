@@ -37,6 +37,7 @@ class UserController implements IUser {
     try {
       sequelize.sync()
       const users = await User.findAll();
+      console.log(users)
       res.status(200).json(users);
     } catch (error) {
       console.error(error);
@@ -50,11 +51,12 @@ class UserController implements IUser {
     const target = await User.findOne({ where: { id: req.body.userId } });
 
     if (target) {
-      target.companyId = req.body 
+      target.companyId = req.body.companyId
+      //console.log(req.body)
       await target.save()
     }
 
-    res.status(200).json("success");
+    res.status(200).json("success: company updated successfully");
 
   }
 

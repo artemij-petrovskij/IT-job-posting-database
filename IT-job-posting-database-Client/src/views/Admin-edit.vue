@@ -123,6 +123,7 @@ export default {
             if (response.err) {
                 console.log("Empty my_adverts list");
             } else {
+                console.log(response)
                 this.my_adverts = response.reverse();
             }
         },

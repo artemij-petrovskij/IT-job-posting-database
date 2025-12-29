@@ -151,7 +151,7 @@ class VacancyController {
                     categoryId: categoryId,
                     companyId: companyId,
                 });
-                res.status(201).send({ "success": `Data object created successfully` });
+                res.status(201).send({ "success": `Vacancy created successfully` });
             }
             catch (error) {
                 console.error(error);
@@ -167,7 +167,7 @@ class VacancyController {
                     name: name,
                     description: description,
                 });
-                res.status(201).send({ "success": `Data object created successfully` });
+                res.status(201).send({ "success": `Company created successfully` });
             }
             catch (error) {
                 console.error(error);
@@ -270,9 +270,7 @@ class VacancyController {
                 where: { userId: req.body.userId, vacancyId: req.body.vacancyId },
             });
             if (decisions) {
-                // Обновляем значение
                 decisions.coverLetter = req.body.decision;
-                // Сохраняем изменения
                 yield decisions.save();
                 console.log('Статус успешно обновлен');
             }
@@ -283,11 +281,6 @@ class VacancyController {
             res.json(req.body);
         });
     }
-    // async getReplies(req: Request, res: Response, next: NextFunction): Promise<any> {
-    //   const resume = await Application.findAll();
-    //   console.log(resume)
-    //   res.json(resume)
-    // }
     companyFeedback(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const { companyFeebackComment, raiting, email, feedBackCompanyId } = req.body;

@@ -181,10 +181,11 @@ export default {
     dialog: false,
     overlay: true,
     username: localStorage.getItem("email"),
+    companyId: localStorage.getItem("companyId"),
     show: false,
     shows: false,
     roleId:localStorage.getItem("roleId"),
-    companyId: "",
+
     search_field: "",
     search_value: "",
     radios: null,
@@ -192,7 +193,7 @@ export default {
   methods: {
     async loadAdvert() {
       const id = this.$route.query.id;
-      let response = await Vacancy.getOneCompany(id);
+      let response = await Vacancy.getOneCompany(this.companyId);
 
       this.items = response.vacancies;
       this.current_company = response;

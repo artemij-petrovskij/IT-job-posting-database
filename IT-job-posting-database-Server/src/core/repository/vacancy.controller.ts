@@ -15,7 +15,7 @@ interface IVacancy {
   getVacancies(req: Request, res: Response, next: NextFunction): Promise<any>;
   getCurrentVacancies(req: Request, res: Response, next: NextFunction): Promise<any>;
   getOneVacancy(req: Request, res: Response, next: NextFunction): Promise<any>;
-  
+
   createVacancy(req: Request, res: Response, next: NextFunction): Promise<any>;
   createCompany(req: Request, res: Response, next: NextFunction): Promise<any>;
   getOneCompany(req: Request, res: Response, next: NextFunction): Promise<any>;
@@ -160,12 +160,9 @@ class VacancyController implements IVacancy {
       const {
         title,
         description,
-
         salary,
         requirements,
         location,
-
-
         categoryId,
         companyId,
         email,
@@ -187,7 +184,7 @@ class VacancyController implements IVacancy {
 
       });
 
-      res.status(201).send({ "success": `Data object created successfully` });
+      res.status(201).send({ "success": `Vacancy created successfully` });
     } catch (error) {
       console.error(error);
       res.status(500).json({ "error": "An error occurred while updating the Item" });
@@ -206,7 +203,7 @@ class VacancyController implements IVacancy {
         description: description,
       });
 
-      res.status(201).send({ "success": `Data object created successfully` });
+      res.status(201).send({ "success": `Company created successfully` });
     } catch (error) {
       console.error(error);
       res.status(500).json({ "error": "An error occurred while updating the Item" });
@@ -220,7 +217,7 @@ class VacancyController implements IVacancy {
         where: { id: req.params.id }, include: [
           {
             model: Vacancy,
-            attributes: ['id','title','description','salary',  'requirements','location','date'],
+            attributes: ['id', 'title', 'description', 'salary', 'requirements', 'location', 'date'],
           },
         ],
       });
@@ -325,10 +322,8 @@ class VacancyController implements IVacancy {
 
     });
     if (decisions) {
-      // Обновляем значение
       decisions.coverLetter = req.body.decision;
 
-      // Сохраняем изменения
       await decisions.save();
 
       console.log('Статус успешно обновлен');
@@ -340,12 +335,7 @@ class VacancyController implements IVacancy {
   }
 
 
-  // async getReplies(req: Request, res: Response, next: NextFunction): Promise<any> {
-  //   const resume = await Application.findAll();
-  //   console.log(resume)
-  //   res.json(resume)
 
-  // }
 
   async companyFeedback(req: Request, res: Response, next: NextFunction): Promise<any> {
     const {

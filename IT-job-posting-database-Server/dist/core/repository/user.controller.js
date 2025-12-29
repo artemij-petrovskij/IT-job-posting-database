@@ -32,6 +32,7 @@ class UserController {
             try {
                 models_1.sequelize.sync();
                 const users = yield User_1.User.findAll();
+                console.log(users);
                 res.status(200).json(users);
             }
             catch (error) {
@@ -46,10 +47,11 @@ class UserController {
             const { userId } = req.body;
             const target = yield User_1.User.findOne({ where: { id: req.body.userId } });
             if (target) {
-                target.companyId = req.body;
+                target.companyId = req.body.companyId;
+                //console.log(req.body)
                 yield target.save();
             }
-            res.status(200).json("success");
+            res.status(200).json("success: company updated successfully");
         });
     }
     //////////// DELETE
