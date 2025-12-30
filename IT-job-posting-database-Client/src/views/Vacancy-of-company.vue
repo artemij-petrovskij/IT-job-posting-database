@@ -10,30 +10,24 @@
       </h1>
       <v-card class="mx-auto my-8" border>
         <v-card-item>
-        {{ current_company.description }}
+          {{ current_company.description }}
           <v-card-title>
             <div class="text-h4 text-left"></div>
           </v-card-title>
           <v-card-subtitle>
-          
+
           </v-card-subtitle>
         </v-card-item>
 
-        
-       
+
+
       </v-card>
 
       <v-main>
-        <v-data-iterator
-          :items="items"
-          :items-per-page="itemsPerPage"
-        
-        >
+        <v-data-iterator :items="items" :items-per-page="itemsPerPage">
           <template v-slot:header="{ page, pageCount, prevPage, nextPage }">
-            <h3
-              class="text-h4 font-weight-bold d-flex justify-space-between mb-4 align-center"
-            >
-              <div >Вакансии компании  {{ current_company.name }} ({{vacancies_count}})</div>
+            <h3 class="text-h4 font-weight-bold d-flex justify-space-between mb-4 align-center">
+              <div>Вакансии компании {{ current_company.name }} ({{ vacancies_count }})</div>
 
               <div class="d-flex align-center">
                 <v-btn class="me-8" variant="text" @click="onClickSeeAll">
@@ -41,39 +35,24 @@
                 </v-btn>
 
                 <div class="d-inline-flex">
-                  <v-btn
-                    :disabled="page === 1"
-                    class="me-2"
-                    icon="mdi-arrow-left"
-                    size="small"
-                    variant="tonal"
-                    @click="prevPage"
-                  ></v-btn>
+                  <v-btn :disabled="page === 1" class="me-2" icon="mdi-arrow-left" size="small" variant="tonal"
+                    @click="prevPage"></v-btn>
 
-                  <v-btn
-                    :disabled="page === pageCount"
-                    icon="mdi-arrow-right"
-                    size="small"
-                    variant="tonal"
-                    @click="nextPage"
-                  ></v-btn>
+                  <v-btn :disabled="page === pageCount" icon="mdi-arrow-right" size="small" variant="tonal"
+                    @click="nextPage"></v-btn>
                 </div>
               </div>
             </h3>
-           
+
           </template>
 
           <template v-slot:default="{ items }">
             <v-row>
               <v-col v-for="(item, i) in items" :key="i" cols="12" sm="12" xl="3">
                 <v-sheet border rounded>
-                  <v-list-item
-                    :title="item.raw.title"
+                  <v-list-item :title="item.raw.title"
                     :href="`/vacancy?id=${item.raw.id}&company=${item.title}&companyId=${item.raw.id}&description=${item.description}`"
-                    density="comfortable"
-                    lines="two"
-                    subtitle=""
-                  >
+                    density="comfortable" lines="two" subtitle="">
                     <template v-slot:title>
                       <strong class="text-h6">
                         {{ item.raw.title }}
@@ -85,11 +64,7 @@
                     <v-chip size="small"> Опыт: {{ item.raw.requirements }} </v-chip>
                   </v-list-item>
 
-                  <v-btn
-                    variant="plain"
-                    :ripple="false"
-                    :href="`vacancy-of-company?id=${item.raw.id}`"
-                  >
+                  <v-btn variant="plain" :ripple="false" :href="`vacancy-of-company?id=${item.raw.id}`">
                     {{ current_company.name }}
                   </v-btn>
 
@@ -131,21 +106,17 @@
                               Откликнуться
                               {{ item.raw.check ? 1 : `asdf` }}
                             </v-btn> -->
-                      <v-btn
-                        v-if="roleId == '1'"
-                        variant="elevated"
-                        class="ma-4"
-                        :color="
-                          buttonColors[item.raw.id] ||
-                          (item.raw.check ? 'primary' : 'normal')
-                        "
-                        @click="
+                      <!-- <v-btn v-if="roleId == '1'" variant="elevated" class="ma-4" :color="buttonColors[item.raw.id] ||
+                        (item.raw.check ? 'primary' : 'normal')
+                        " @click="
                           handleClick(item.raw.id),
-                            reply(item.raw.id, item.raw.company.id)
-                        "
-                        :key="item.raw.id"
-                      >
+                          reply(item.raw.id, item.raw.company.id)
+                          " :key="item.raw.id">
                         {{ item.raw.check ? "Вы откликнулись" : "Откликнуться" }}
+                      </v-btn> -->
+                      
+                      <v-btn variant="outlined" :href="`/edit-vacancy?id=${item.raw.id}`">
+                        Редактировать
                       </v-btn>
                     </tbody>
                   </v-table>
@@ -155,10 +126,7 @@
           </template>
 
           <template v-slot:footer="{ page, pageCount }">
-            <v-footer
-              class="justify-space-between text-body-2 mt-4"
-              color="surface-variant"
-            >
+            <v-footer class="justify-space-between text-body-2 mt-4" color="surface-variant">
               Всего вакансий: {{ items.length }}
 
               <div>Страница {{ page }} из {{ pageCount }}</div>
@@ -184,7 +152,7 @@ export default {
     companyId: localStorage.getItem("companyId"),
     show: false,
     shows: false,
-    roleId:localStorage.getItem("roleId"),
+    roleId: localStorage.getItem("roleId"),
 
     search_field: "",
     search_value: "",
@@ -193,7 +161,7 @@ export default {
   methods: {
     async loadAdvert() {
       const id = this.$route.query.id;
-      let response = await Vacancy.getOneCompany(this.companyId);
+      let response = await Vacancy.getOneCompany(id);
 
       this.items = response.vacancies;
       this.current_company = response;

@@ -162,7 +162,18 @@ const routes = [
       },
     ],
   },
-
+  
+  {
+    path: '/edit-vacancy',
+    component: () => import('@/layouts/logged/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'edit-vacancy',
+        component: () => import('@/views/Edit-vacancy.vue'),
+      },
+    ],
+  },
 
   {
     path: '/resumes',

@@ -54,7 +54,7 @@
           >
           </v-text-field>
           <v-btn class="mt-4" color="success" type="submit" :disabled="!valid" block>
-            Создать резюме
+            Редактировать резюме
           </v-btn>
         </v-form>
 

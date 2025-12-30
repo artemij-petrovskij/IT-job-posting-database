@@ -1,10 +1,11 @@
 <template>
   <v-app-bar :elevation="2" rounded>
-    <template v-slot:prepend>
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
-    </template>
 
-    <v-app-bar-title>IT-Вакансии {{ companyName }}</v-app-bar-title>
+
+
+
+
+    <v-app-bar-title> <v-icon icon="mdi-circle-slice-4" /> IT-Вакансии {{ companyName }}</v-app-bar-title>
 
     <template v-slot:append v-if="hr_mode">
       <!-- Кнопки, которые видны только на больших экранах -->
@@ -15,6 +16,9 @@
         <v-btn class="auth" to="/create-resume"> Создать резюме </v-btn>
         <v-btn class="auth" to="/replies"> Мои отклики ({{ current_user }}) </v-btn>
         <v-btn class="auth" to="/resumes"> Мои резюме ({{ current_user }}) </v-btn>
+        <v-btn class="auth" variant="text" to="/vacancies"> Избранное
+          <v-badge v-if="show_favorites" color="error" :content="favorites_length" inline></v-badge> </v-btn>
+
       </div>
 
       <!-- Меню (всегда видно, но содержимое меняется) -->
@@ -25,6 +29,7 @@
 
         <v-list width="300px">
           <div class="d-md-none">
+
             <v-btn block variant="text" to="/vacancies"> Вакансии </v-btn>
             <v-btn block variant="text" to="/create-resume"> Создать резюме </v-btn>
             <v-btn block variant="text" to="/replies">
@@ -37,6 +42,7 @@
           </div>
 
           <!-- Кнопки, которые всегда в меню -->
+
           <v-btn block variant="text"> Аккаунт </v-btn>
           <v-btn block variant="text" to="/companies"> Оставить отзыв о компании </v-btn>
           <v-btn block variant="text" @click="logout()"> Выйти </v-btn>
@@ -94,6 +100,8 @@
 </template>
 
 <script>
+import { setInterval } from 'core-js';
+
 export default {
   data: () => ({
     hr_mode: false,
@@ -104,6 +112,10 @@ export default {
     role: localStorage.getItem("roleId"),
     companyId: localStorage.getItem("companyId"),
     companyName: localStorage.getItem("companyName"),
+    favorites: localStorage.getItem("favorites"),
+
+    favorites_length: 0,
+    show_favorites: false,
   }),
   methods: {
     logout() {
@@ -112,6 +124,8 @@ export default {
       localStorage.removeItem("roleId");
       localStorage.removeItem("companyId");
       localStorage.removeItem("companyName");
+      localStorage.removeItem("favorites");
+
       this.$router.push("/");
     },
   },
@@ -125,10 +139,26 @@ export default {
       this.user_mode = true;
       console.log("USER");
     }
+
     if (this.role == 1) {
       this.hr_mode = true;
       console.log("USER");
     }
+
+    setInterval(() => {
+      if (localStorage.getItem("favorites") !== null)
+
+        this.favorites = localStorage.getItem("favorites")
+      this.favorites_length = JSON.parse(localStorage.getItem("favorites")).length
+      if (this.favorites_length > 0) {
+        this.show_favorites = true
+      }else{
+        this.show_favorites = false
+      }
+      //console.log(JSON.parse(localStorage.getItem("favorites")))
+
+
+    }, 1000)
   },
 };
 </script>

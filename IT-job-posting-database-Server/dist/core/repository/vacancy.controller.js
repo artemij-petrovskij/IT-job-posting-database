@@ -85,7 +85,6 @@ class VacancyController {
                     attributes: ['id', 'title', 'description', 'salary', 'requirements', 'location'], // Выбираем только нужные поля из Vacancy
                 });
                 const replies = yield this.getIdByEmail(req.body.email);
-                console.log(replies);
                 const applications = yield Application_1.Application.findAll({
                     where: { userId: replies },
                     include: [
@@ -159,6 +158,44 @@ class VacancyController {
             }
         });
     }
+    editVacancy(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id, title, description, salary, requirements, location, categoryId, companyId, email, } = req.body;
+                // console.log(req.body)
+                const target = yield this.getIdByEmail(email);
+                const vacancy = yield Vacancy_1.Vacancy.findOne({ where: { id: req.body.id } });
+                console.log(req.body.id);
+                if (vacancy) {
+                    vacancy.title = req.body.title;
+                    vacancy.description = req.body.description;
+                    vacancy.salary = req.body.salary;
+                    vacancy.requirements = req.body.requirements;
+                    vacancy.location = req.body.location;
+                    vacancy.location = req.body.location;
+                    vacancy.date = (0, date_1.default)(),
+                        vacancy.categoryId = req.body.categoryId;
+                    vacancy.companyId = req.body.companyId;
+                    yield vacancy.save();
+                }
+                // const newVacancy = await Vacancy.create({
+                //   title: title,
+                //   description: description,
+                //   salary: salary,
+                //   requirements: requirements,
+                //   location: location,
+                //   date: formattedDate(),
+                //   categoryId: categoryId,
+                //   companyId: companyId,
+                // });
+                res.status(201).send({ "success": `Vacancy created successfully` });
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ "error": "An error occurred while updating the Item" });
+            }
+        });
+    }
     createCompany(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -186,7 +223,6 @@ class VacancyController {
                         },
                     ],
                 });
-                console.log(resume);
                 res.json(resume);
             }
             catch (error) {
@@ -216,9 +252,7 @@ class VacancyController {
             try {
                 const { email, vacancyId, companyId } = req.body;
                 const target = yield this.getIdByEmail(email);
-                console.log(req.body);
                 const exOrNot = yield Application_1.Application.findOne({ where: { userId: target, vacancyId: vacancyId } });
-                console.log(exOrNot);
                 if (exOrNot === null) {
                     const newApplication = yield Application_1.Application.create({
                         coverLetter: "На рассмотрении",
@@ -240,9 +274,6 @@ class VacancyController {
     }
     getReplies(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(req.body);
-            console.log("Делаю отклик");
-            console.log();
             const applications = yield Application_1.Application.findAll({
                 where: { companyId: req.body.companyId },
                 include: [

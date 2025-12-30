@@ -22,6 +22,8 @@ class VacancyRouter implements Routes {
 
 
         this.router.put('/create-vacancy', this.resume.createVacancy.bind(this.resume));
+        this.router.post('/edit-vacancy', this.resume.editVacancy.bind(this.resume));
+
 
         this.router.put('/create-company', this.resume.createCompany.bind(this.resume));
         this.router.put('/create-category', this.resume.createCategory.bind(this.resume));

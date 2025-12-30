@@ -17,6 +17,8 @@ interface IVacancy {
   getOneVacancy(req: Request, res: Response, next: NextFunction): Promise<any>;
 
   createVacancy(req: Request, res: Response, next: NextFunction): Promise<any>;
+  editVacancy(req: Request, res: Response, next: NextFunction): Promise<any>;
+
   createCompany(req: Request, res: Response, next: NextFunction): Promise<any>;
   getOneCompany(req: Request, res: Response, next: NextFunction): Promise<any>;
 
@@ -106,7 +108,7 @@ class VacancyController implements IVacancy {
       });
 
       const replies = await this.getIdByEmail(req.body.email)
-      console.log(replies)
+
 
       const applications = await Application.findAll({
         where: { userId: replies },
@@ -191,6 +193,60 @@ class VacancyController implements IVacancy {
     }
   }
 
+
+  async editVacancy(req: Request, res: Response, next: NextFunction): Promise<any> {
+    try {
+      const {
+        id,
+        title,
+        description,
+        salary,
+        requirements,
+        location,
+        categoryId,
+        companyId,
+        email,
+
+      } = req.body;
+      // console.log(req.body)
+      const target = await this.getIdByEmail(email)
+      const vacancy = await Vacancy.findOne({ where: { id: req.body.id } });
+      console.log(req.body.id)
+      if (vacancy) {
+        vacancy.title = req.body.title
+        vacancy.description = req.body.description
+        vacancy.salary = req.body.salary
+        vacancy.requirements = req.body.requirements
+        vacancy.location = req.body.location
+        vacancy.location = req.body.location
+        vacancy.date = formattedDate(),
+          vacancy.categoryId = req.body.categoryId
+        vacancy.companyId = req.body.companyId
+        await vacancy.save()
+      }
+
+
+      // const newVacancy = await Vacancy.create({
+      //   title: title,
+      //   description: description,
+
+      //   salary: salary,
+      //   requirements: requirements,
+      //   location: location,
+      //   date: formattedDate(),
+
+      //   categoryId: categoryId,
+      //   companyId: companyId,
+
+      // });
+
+      res.status(201).send({ "success": `Vacancy created successfully` });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ "error": "An error occurred while updating the Item" });
+    }
+  }
+
   async createCompany(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
       const {
@@ -221,7 +277,7 @@ class VacancyController implements IVacancy {
           },
         ],
       });
-      console.log(resume)
+
       res.json(resume)
     } catch (error) {
       console.error(error);
@@ -258,12 +314,12 @@ class VacancyController implements IVacancy {
       } = req.body;
       const target = await this.getIdByEmail(email)
 
-      console.log(req.body)
+
 
 
       const exOrNot = await Application.findOne({ where: { userId: target, vacancyId: vacancyId } })
 
-      console.log(exOrNot)
+
       if (exOrNot === null) {
         const newApplication = await Application.create({
           coverLetter: "На рассмотрении",
@@ -286,9 +342,8 @@ class VacancyController implements IVacancy {
   }
 
   async getReplies(req: Request, res: Response, next: NextFunction): Promise<any> {
-    console.log(req.body)
-    console.log("Делаю отклик")
-    console.log()
+
+
     const applications = await Application.findAll({
       where: { companyId: req.body.companyId },
       include: [

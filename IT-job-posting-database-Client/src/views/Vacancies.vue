@@ -71,6 +71,7 @@
                     <template v-slot:title>
                       <strong class="text-h6">
                         {{ item.raw.title }}
+
                       </strong>
                     </template>
                   </v-list-item>
@@ -104,16 +105,32 @@
                         <td></td>
                       </tr>
 
-                      <v-btn rounded="lg" size="large" v-if="roleId == '1'" variant="flat" class="ma-4" :color="buttonColors[item.raw.id] ||
-                        (item.raw.check ? 'normal' : 'primary')
-                        " @click="handleButtonClick(item.raw)" :key="item.raw.id">
-                        {{
-                          buttonColors[item.raw.id] === "normal" || item.raw.check
-                            ? "Вы откликнулись"
-                            : "Откликнуться"
-                        }}
-                      </v-btn>
+                      <tr>
+                        <td colspan="2">
+                          <div class="d-flex justify-space-between align-center">
+
+                            <div v-if="roleId == '1'">
+                              <v-btn class="mt-3 mb-3" rounded="lg" size="large" variant="flat"
+                                :color="buttonColors[item.raw.id] || (item.raw.check ? 'normal' : 'primary')"
+                                @click="handleButtonClick(item.raw)" :key="item.raw.id">
+                                {{
+                                  buttonColors[item.raw.id] === "normal" || item.raw.check
+                                    ? "Вы откликнулись"
+                                    : "Откликнуться"
+                                }}
+                              </v-btn>
+                            </div>
+
+
+                            <v-btn :icon="isFavorite(item.raw.id) ? 'mdi-heart' : 'mdi-heart-outline'"
+                              @click="toggleFavorite(item.raw)" variant="text"
+                              :color="isFavorite(item.raw.id) ? 'red' : 'grey-lighten-1'" size="large" class="ml-2">
+                            </v-btn>
+                          </div>
+                        </td>
+                      </tr>
                     </tbody>
+
                   </v-table>
                 </v-card>
               </template>
@@ -172,6 +189,9 @@ export default {
     vacancies: null,
 
     buttonColors: {},
+
+
+    favorites: [],
   }),
 
   watch: {
@@ -204,6 +224,71 @@ export default {
     getItemById(id) {
       return this.allItems.find((item) => item.id === id);
     },
+    loadFavorites() {
+      const savedFavorites = localStorage.getItem('favorites');
+      if (savedFavorites) {
+        this.favorites = JSON.parse(savedFavorites);
+      }
+    },
+
+    // Проверяем, находится ли вакансия в избранном
+    isFavorite(vacancyId) {
+      return this.favorites.includes(vacancyId);
+    },
+
+    // Добавляем/удаляем из избранного
+    toggleFavorite(vacancy) {
+      const vacancyId = vacancy.id;
+
+      if (this.isFavorite(vacancyId)) {
+        // Удаляем из избранного
+        this.favorites = this.favorites.filter(id => id !== vacancyId);
+        this.snackbar = true;
+        this.snackbar_title_text = "Уведомление";
+        this.snackbar_text = "Убрано из избранного";
+      } else {
+        // Добавляем в избранное
+        this.favorites.push(vacancyId);
+        this.snackbar = true;
+        this.snackbar_title_text = "Успешно";
+        this.snackbar_text = "Добавлено в избранное";
+      }
+
+      // Сохраняем в localStorage
+      localStorage.setItem('favorites', JSON.stringify(this.favorites));
+    },
+
+    // Можно также сохранять полную информацию о вакансии
+    toggleFavoriteWithData(vacancy) {
+      const vacancyId = vacancy.id;
+      let favoritesData = JSON.parse(localStorage.getItem('favoritesData') || '{}');
+
+      if (favoritesData[vacancyId]) {
+        // Удаляем
+        delete favoritesData[vacancyId];
+        this.snackbar = true;
+        this.snackbar_title_text = "Уведомление";
+        this.snackbar_text = "Убрано из избранного";
+      } else {
+        // Добавляем с данными
+        favoritesData[vacancyId] = {
+          id: vacancy.id,
+          title: vacancy.title,
+          company: vacancy.company?.name || '',
+          salary: vacancy.salary,
+          location: vacancy.location,
+          addedAt: new Date().toISOString()
+        };
+        this.snackbar = true;
+        this.snackbar_title_text = "Успешно";
+        this.snackbar_text = "Добавлено в избранное";
+      }
+
+      localStorage.setItem('favoritesData', JSON.stringify(favoritesData));
+      // Обновляем массив ID
+      this.favorites = Object.keys(favoritesData).map(id => parseInt(id));
+    },
+
 
     async reply(id, companyId) {
       console.log(id);
@@ -363,7 +448,7 @@ export default {
           localStorage.setItem("companyName", response.companyName.name);
         }
 
-      
+
 
 
         const companyName = response.companyName
@@ -378,7 +463,7 @@ export default {
 
 
 
-  if (storedRole !== currentRole) {
+        if (storedRole !== currentRole) {
           // Даем небольшое время для рендеринга данных перед перезагрузкой
           location.reload();
         }
@@ -412,6 +497,9 @@ export default {
 
   async created() {
     await this.loadMyAdverts();
+    this.loadFavorites(); // Загружаем избранное
+
+
   },
 };
 </script>
