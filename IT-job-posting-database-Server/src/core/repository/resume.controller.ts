@@ -79,7 +79,7 @@ class ResumeController implements IResume {
   }
 
   async createResume(req: Request, res: Response, next: NextFunction): Promise<any> {
-    //await Resume.sync({ alter: true });
+   
     try {
       const {
         title,
@@ -104,7 +104,7 @@ class ResumeController implements IResume {
         userId: target
 
       });
-      Resume.sync({ alter: true })
+     // Resume.sync({ alter: true })
 
       console.log(newResume)
       res.status(201).send({ "success": `Resume object created successfully` });
@@ -142,7 +142,7 @@ class ResumeController implements IResume {
 
       }
 
-      Resume.sync({ alter: true })
+      //Resume.sync({ alter: true })
 
 
       res.status(201).send({ "success": `Resume object edited successfully` });

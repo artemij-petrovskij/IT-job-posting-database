@@ -125,11 +125,11 @@
                         {{ item.raw.check ? "Вы откликнулись" : "Откликнуться" }}
                       </v-btn> -->
 
-                      <v-btn class="ma-3" variant="outlined" :href="`/edit-vacancy?id=${item.raw.id}`">
+                      <v-btn v-if="roleId == '2'" class="ma-3" variant="outlined" :href="`/edit-vacancy?id=${item.raw.id}`">
                         Редактировать
                       </v-btn>
 
-                      <v-btn class="" color="red" variant="outlined" @click="deleteItem(item.raw.id)">
+                      <v-btn  v-if="roleId == '2'" class="" color="red" variant="outlined" @click="deleteItem(item.raw.id)">
                         Удалить
                       </v-btn>
                     </tbody>

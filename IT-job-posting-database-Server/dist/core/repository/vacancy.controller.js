@@ -101,8 +101,12 @@ class VacancyController {
                             model: Company_1.Company,
                             attributes: ['name'],
                         },
+                        {
+                            model: Resume_1.Resume,
+                            attributes: ['title'],
+                        },
                     ],
-                    attributes: ['vacancyId', 'coverLetter', 'updatedAt', 'companyId'],
+                    attributes: ['vacancyId', 'coverLetter', 'updatedAt', 'companyId', 'resumeId'],
                 });
                 const resumes = yield Resume_1.Resume.findAll({
                     where: { userId: replies },
@@ -336,6 +340,12 @@ class VacancyController {
         return __awaiter(this, void 0, void 0, function* () {
             const id = req.params.id;
             console.log('УДАЛЕНИЕ ' + id);
+            yield Vacancy_1.Vacancy.destroy({
+                where: {
+                    id: req.params.id,
+                },
+            });
+            res.status(200).json({ "OK": "Item deleted succefully" });
         });
     }
     updateVacancy(req, res, next) {

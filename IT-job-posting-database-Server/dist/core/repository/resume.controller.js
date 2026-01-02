@@ -74,7 +74,6 @@ class ResumeController {
     }
     createResume(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            //await Resume.sync({ alter: true });
             try {
                 const { title, skills, salary, description, contacts, email, categoryId } = req.body;
                 const target = yield this.getIdByEmail(email);
@@ -88,7 +87,7 @@ class ResumeController {
                     categoryId: categoryId,
                     userId: target
                 });
-                Resume_1.Resume.sync({ alter: true });
+                // Resume.sync({ alter: true })
                 console.log(newResume);
                 res.status(201).send({ "success": `Resume object created successfully` });
             }
@@ -114,7 +113,7 @@ class ResumeController {
                     resume.userId = target;
                     yield resume.save();
                 }
-                Resume_1.Resume.sync({ alter: true });
+                //Resume.sync({ alter: true })
                 res.status(201).send({ "success": `Resume object edited successfully` });
             }
             catch (error) {

@@ -127,8 +127,12 @@ class VacancyController implements IVacancy {
             model: Company,
             attributes: ['name'],
           },
+          {
+            model: Resume,
+            attributes: ['title'],
+          },
         ],
-        attributes: ['vacancyId', 'coverLetter', 'updatedAt', 'companyId'],
+        attributes: ['vacancyId', 'coverLetter', 'updatedAt', 'companyId', 'resumeId'],
       });
 
       const resumes = await Resume.findAll({
@@ -423,7 +427,14 @@ class VacancyController implements IVacancy {
   async deleteVacancy(req: Request, res: Response, next: NextFunction): Promise<any> {
 
     const id = req.params.id
-    console.log('УДАЛЕНИЕ '+ id)
+    console.log('УДАЛЕНИЕ ' + id)
+    await Vacancy.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.status(200).json({ "OK": "Item deleted succefully" });
+
   }
   async updateVacancy(req: Request, res: Response, next: NextFunction): Promise<any> { }
 
