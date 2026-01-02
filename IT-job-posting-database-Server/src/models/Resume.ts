@@ -1,6 +1,8 @@
-import { Table, Column, Model, DataType, BelongsTo, ForeignKey } from "sequelize-typescript";
+import { Table, Column, Model, DataType, BelongsTo, ForeignKey, HasMany } from "sequelize-typescript";
 import { User } from "./User";
 import { Category } from "./Category";
+import { Application } from "./Application";
+
 
 @Table
 export class Resume extends Model {
@@ -32,4 +34,8 @@ export class Resume extends Model {
 
     @BelongsTo(() => User)
     user!: User;
+
+    //
+    @HasMany(() => Application)
+    applications!: Application[];
 }

@@ -16,7 +16,7 @@
         <v-btn class="auth" to="/create-resume"> Создать резюме </v-btn>
         <v-btn class="auth" to="/replies"> Мои отклики ({{ current_user }}) </v-btn>
         <v-btn class="auth" to="/resumes"> Мои резюме ({{ current_user }}) </v-btn>
-        <v-btn class="auth" variant="text" to="/vacancies"> Избранное
+        <v-btn class="auth" variant="text" to="/favorites"> Избранное
           <v-badge v-if="show_favorites" color="error" :content="favorites_length" inline></v-badge> </v-btn>
 
       </div>
@@ -112,7 +112,7 @@ export default {
     role: localStorage.getItem("roleId"),
     companyId: localStorage.getItem("companyId"),
     companyName: localStorage.getItem("companyName"),
-    favorites: localStorage.getItem("favorites"),
+    favorites: null,
 
     favorites_length: 0,
     show_favorites: false,
@@ -146,19 +146,26 @@ export default {
     }
 
     setInterval(() => {
-      if (localStorage.getItem("favorites") !== null)
+      try {
+        const favoritesData = localStorage.getItem("favorites");
 
-        this.favorites = localStorage.getItem("favorites")
-      this.favorites_length = JSON.parse(localStorage.getItem("favorites")).length
-      if (this.favorites_length > 0) {
-        this.show_favorites = true
-      }else{
-        this.show_favorites = false
+        if (favoritesData) {
+          this.favorites = favoritesData;
+          const parsedFavorites = JSON.parse(favoritesData);
+          this.favorites_length = parsedFavorites.length;
+          this.show_favorites = this.favorites_length > 0;
+        } else {
+          this.favorites = null;
+          this.favorites_length = 0;
+          this.show_favorites = false;
+        }
+      } catch (error) {
+        console.error("Error parsing favorites:", error);
+        this.favorites = null;
+        this.favorites_length = 0;
+        this.show_favorites = false;
       }
-      //console.log(JSON.parse(localStorage.getItem("favorites")))
-
-
-    }, 1000)
+    }, 1000);
   },
 };
 </script>

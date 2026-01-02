@@ -5,11 +5,11 @@
     <v-main class="mx-3 py-5">
       <v-card class="mx-auto" variant="text" max-width="900">
         <h3 class="text-h4 font-weight-bold d-flex justify-space-between mb-4 align-center">
-          Вакансии
+          Избранные вакансии
         </h3>
       </v-card>
 
-      <v-card border class="mx-auto mb-5" variant="text" rounded="lg" max-width="900">
+      <!-- <v-card border class="mx-auto mb-5" variant="text" rounded="lg" max-width="900">
         <v-card-actions>
           <v-btn block text=" Поиск и фильтрация" @click="shows = !shows"></v-btn>
 
@@ -26,7 +26,6 @@
               <v-text-field v-model="search_field" label="Поиск" clearable prepend-icon="mdi-magnify" variant="outlined"
                 @input="searcher()" @blur="searcher_blur()"></v-text-field>
 
-              <!-- <p>Selected Button: {{ radios }}</p> -->
               <v-radio-group v-model="radios" inline @change="applayFilter()">
                 <v-radio :value="1" label="По дате"></v-radio>
                 <v-radio :value="2" label="По соответствию"></v-radio>
@@ -39,12 +38,12 @@
             </v-responsive>
           </div>
         </v-expand-transition>
-      </v-card>
+      </v-card> -->
       <v-fade-transition>
         <div v-if="show" class="my-box">
           <v-card v-if="items.length != 0 && search_field === ''" class="mx-auto" variant="text" max-width="900">
             <h3 class="text-h6 font-weight-bold d-flex justify-space-between mb-4 align-center">
-              Найдено вакансий: {{ items.length }}
+              Всего вакансий: {{ items.length }}
               <b v-if="search_field !== ''"> по запросу {{ search_field }} </b>
             </h3>
           </v-card>
@@ -57,7 +56,7 @@
 
           <v-card v-if="items.length == 0" class="mx-auto" variant="text" max-width="900">
             <h3 class="text-h6 font-weight-bold d-flex justify-space-between mb-4 align-center">
-              По вашему запросу ничего не найдено
+              Нет избранных вакансий
             </h3>
           </v-card>
 
@@ -105,7 +104,7 @@
                         <td></td>
                       </tr>
 
-                      <tr v-if="roleId == '1'">
+                      <tr>
                         <td colspan="2">
                           <div class="d-flex justify-space-between align-center">
 
@@ -122,7 +121,8 @@
                             </div>
 
 
-                            <v-btn   :icon="isFavorite(item.raw.id) ? 'mdi-heart' : 'mdi-heart-outline'"
+                            <v-btn v-if="roleId == '1'"
+                              :icon="isFavorite(item.raw.id) ? 'mdi-heart' : 'mdi-heart-outline'"
                               @click="toggleFavorite(item.raw)" variant="text"
                               :color="isFavorite(item.raw.id) ? 'red' : 'grey-lighten-1'" size="large" class="ml-2">
                             </v-btn>
@@ -267,7 +267,7 @@ export default {
     // Добавляем/удаляем из избранного
     toggleFavorite(vacancy) {
       const vacancyId = vacancy.id;
-
+this.loadMyAdverts() 
       if (this.isFavorite(vacancyId)) {
         // Удаляем из избранного
         this.favorites = this.favorites.filter(id => id !== vacancyId);
@@ -486,19 +486,28 @@ export default {
         const applications = response.applications;
 
         const resumes = response.resumes
-        console.log(resumes)
+        //console.log(resumes)
 
         this.resumes = resumes
 
 
+        console.log(this.favorites)
+
+        const favoritesStr = localStorage.getItem('favorites');
+        const favoritesArr = favoritesStr ? JSON.parse(favoritesStr) : [];
         // Сохраняем все вакансии
-        this.allItems = vacancies.map((vacancy) => {
-          const isMatched = applications.some((app) => app.vacancyId === vacancy.id);
-          return {
-            ...vacancy,
-            check: isMatched,
-          };
-        });
+        this.allItems = vacancies
+          .filter(vacancy => favoritesArr.includes(vacancy.id))
+          .map((vacancy) => {
+            const isMatched = applications.some((app) => app.vacancyId === vacancy.id);
+            return {
+              ...vacancy,
+              check: isMatched,
+            };
+          });
+
+
+
 
         this.applyAllFilters();
 

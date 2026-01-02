@@ -3,6 +3,7 @@ import { Vacancy } from '../../models/Vacancy';
 import { Category } from '../../models/Category';
 import { Company } from '../../models/Company';
 import { Application } from '../../models/Application';
+import { Resume } from '../../models/Resume';
 
 import { Feedback } from '../../models/Feedback';
 import { sequelize } from '../../models';
@@ -130,8 +131,13 @@ class VacancyController implements IVacancy {
         attributes: ['vacancyId', 'coverLetter', 'updatedAt', 'companyId'],
       });
 
+      const resumes = await Resume.findAll({
+        where: { userId: replies },
 
-      res.status(200).json({ vacancies, categories, companies, roleId, companyId, applications, feebacks, companyName });
+      });
+
+
+      res.status(200).json({ vacancies, categories, companies, roleId, companyId, applications, feebacks, companyName, resumes });
 
     } catch (error) {
       console.error(error);
@@ -310,7 +316,8 @@ class VacancyController implements IVacancy {
       const {
         email,
         vacancyId,
-        companyId
+        companyId,
+        resumeId
       } = req.body;
       const target = await this.getIdByEmail(email)
 
@@ -325,6 +332,7 @@ class VacancyController implements IVacancy {
           coverLetter: "На рассмотрении",
           vacancyId: vacancyId,
           companyId: companyId,
+          resumeId: resumeId,
           userId: target
 
         });
@@ -412,7 +420,11 @@ class VacancyController implements IVacancy {
     res.json(req.body)
 
   }
-  async deleteVacancy(req: Request, res: Response, next: NextFunction): Promise<any> { }
+  async deleteVacancy(req: Request, res: Response, next: NextFunction): Promise<any> {
+
+    const id = req.params.id
+    console.log('УДАЛЕНИЕ '+ id)
+  }
   async updateVacancy(req: Request, res: Response, next: NextFunction): Promise<any> { }
 
 }

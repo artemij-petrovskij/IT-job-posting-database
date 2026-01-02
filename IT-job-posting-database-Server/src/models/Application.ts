@@ -2,6 +2,7 @@ import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from "sequelize
 import { Vacancy } from "./Vacancy";
 import { User } from "./User";
 import { Company } from "./Company";
+import { Resume } from "./Resume";
 
 @Table
 export class Application extends Model {
@@ -28,4 +29,13 @@ export class Application extends Model {
 
     @BelongsTo(() => Company)
     company!: Company;
+
+    /// Добавляем в Application
+    @ForeignKey(() => Resume)
+    @Column({ type: DataType.INTEGER, allowNull: true })
+    resumeId!: number;
+
+    @BelongsTo(() => Resume, { onDelete: 'CASCADE' })
+    resume!: Resume;
+    ///
 }

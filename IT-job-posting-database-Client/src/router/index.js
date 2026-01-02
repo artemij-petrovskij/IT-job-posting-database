@@ -66,6 +66,18 @@ const routes = [
     ],
   },
 
+    {
+    path: '/favorites',
+    component: () => import('@/layouts/logged/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'favorites',
+        component: () => import('@/views/Favorites.vue'),
+      },
+    ],
+  },
+
   {
     path: '/replies',
     component: () => import('@/layouts/logged/Default.vue'),

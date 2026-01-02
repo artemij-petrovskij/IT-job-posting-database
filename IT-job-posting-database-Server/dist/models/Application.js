@@ -14,6 +14,7 @@ const sequelize_typescript_1 = require("sequelize-typescript");
 const Vacancy_1 = require("./Vacancy");
 const User_1 = require("./User");
 const Company_1 = require("./Company");
+const Resume_1 = require("./Resume");
 let Application = class Application extends sequelize_typescript_1.Model {
 };
 exports.Application = Application;
@@ -48,6 +49,15 @@ __decorate([
     (0, sequelize_typescript_1.BelongsTo)(() => Company_1.Company),
     __metadata("design:type", Company_1.Company)
 ], Application.prototype, "company", void 0);
+__decorate([
+    (0, sequelize_typescript_1.ForeignKey)(() => Resume_1.Resume),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.INTEGER, allowNull: true }),
+    __metadata("design:type", Number)
+], Application.prototype, "resumeId", void 0);
+__decorate([
+    (0, sequelize_typescript_1.BelongsTo)(() => Resume_1.Resume, { onDelete: 'CASCADE' }),
+    __metadata("design:type", Resume_1.Resume)
+], Application.prototype, "resume", void 0);
 exports.Application = Application = __decorate([
     sequelize_typescript_1.Table
 ], Application);

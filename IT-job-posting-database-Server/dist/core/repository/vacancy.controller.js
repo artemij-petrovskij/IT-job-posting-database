@@ -18,6 +18,7 @@ const Vacancy_1 = require("../../models/Vacancy");
 const Category_1 = require("../../models/Category");
 const Company_1 = require("../../models/Company");
 const Application_1 = require("../../models/Application");
+const Resume_1 = require("../../models/Resume");
 const Feedback_1 = require("../../models/Feedback");
 const { Op } = require('sequelize');
 // import { sequelize } from '../../models';
@@ -103,7 +104,10 @@ class VacancyController {
                     ],
                     attributes: ['vacancyId', 'coverLetter', 'updatedAt', 'companyId'],
                 });
-                res.status(200).json({ vacancies, categories, companies, roleId, companyId, applications, feebacks, companyName });
+                const resumes = yield Resume_1.Resume.findAll({
+                    where: { userId: replies },
+                });
+                res.status(200).json({ vacancies, categories, companies, roleId, companyId, applications, feebacks, companyName, resumes });
             }
             catch (error) {
                 console.error(error);
@@ -250,7 +254,7 @@ class VacancyController {
     createReply(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { email, vacancyId, companyId } = req.body;
+                const { email, vacancyId, companyId, resumeId } = req.body;
                 const target = yield this.getIdByEmail(email);
                 const exOrNot = yield Application_1.Application.findOne({ where: { userId: target, vacancyId: vacancyId } });
                 if (exOrNot === null) {
@@ -258,6 +262,7 @@ class VacancyController {
                         coverLetter: "На рассмотрении",
                         vacancyId: vacancyId,
                         companyId: companyId,
+                        resumeId: resumeId,
                         userId: target
                     });
                     res.status(201).send({ "success": `Вы откликнулись на вакансию` });
@@ -328,7 +333,10 @@ class VacancyController {
         });
     }
     deleteVacancy(req, res, next) {
-        return __awaiter(this, void 0, void 0, function* () { });
+        return __awaiter(this, void 0, void 0, function* () {
+            const id = req.params.id;
+            console.log('УДАЛЕНИЕ ' + id);
+        });
     }
     updateVacancy(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () { });

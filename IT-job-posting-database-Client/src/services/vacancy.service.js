@@ -55,7 +55,7 @@ class Vacancy {
         }
     }
 
-     static editVacancy = async (body) => {
+    static editVacancy = async (body) => {
         try {
 
 
@@ -63,6 +63,30 @@ class Vacancy {
                 {
                     method: 'post',
                     body: JSON.stringify(body),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.jwt}`
+                    },
+                });
+            if (response.status === 201) {
+                return response.json()
+
+            } else {
+                return { err: 'Server error' }
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    static deleteVacancy = async (id) => {
+        try {
+
+
+            const response = await fetch(`http://localhost:8080/api/vacancy/vacancy/${id}`,
+                {
+                    method: 'delete',
+                    //body: JSON.stringify(body),
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${localStorage.jwt}`

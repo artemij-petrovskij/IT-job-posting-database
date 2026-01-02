@@ -36,34 +36,7 @@
         </v-card-item>
 
         <v-card-title> Характеристики </v-card-title>
-        <v-table>
-          <tbody>
-            <tr>
-              <td class="text-left">Бренд</td>
-              <td class="text-left">{{ current_advert.brand }}</td>
-            </tr>
-            <tr>
-              <td class="text-left">Марка</td>
-              <td class="text-left">{{ current_advert.model }}</td>
-            </tr>
-            <tr>
-              <td class="text-left">Пробег, км</td>
-              <td class="text-left">{{ current_advert.mile_age }}</td>
-            </tr>
-            <tr>
-              <td class="text-left">Тип кузова</td>
-              <td class="text-left">{{ current_advert.body_type }}</td>
-            </tr>
-            <tr>
-              <td class="text-left">Год</td>
-              <td class="text-left">{{ current_advert.age }}</td>
-            </tr>
-            <tr>
-              <td class="text-left">Цвет</td>
-              <td class="text-left">{{ current_advert.color }}</td>
-            </tr>
-          </tbody>
-        </v-table>
+       
       </v-card>
     </v-responsive>
   </v-container>

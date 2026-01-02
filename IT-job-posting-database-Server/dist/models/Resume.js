@@ -13,6 +13,7 @@ exports.Resume = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const User_1 = require("./User");
 const Category_1 = require("./Category");
+const Application_1 = require("./Application");
 let Resume = class Resume extends sequelize_typescript_1.Model {
 };
 exports.Resume = Resume;
@@ -54,6 +55,10 @@ __decorate([
     (0, sequelize_typescript_1.BelongsTo)(() => User_1.User),
     __metadata("design:type", User_1.User)
 ], Resume.prototype, "user", void 0);
+__decorate([
+    (0, sequelize_typescript_1.HasMany)(() => Application_1.Application),
+    __metadata("design:type", Array)
+], Resume.prototype, "applications", void 0);
 exports.Resume = Resume = __decorate([
     sequelize_typescript_1.Table
 ], Resume);

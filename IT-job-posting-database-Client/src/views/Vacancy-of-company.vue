@@ -5,6 +5,16 @@
 
             </v-card> -->
 
+
+
+
+
+
+
+
+
+
+
       <h1 class="text-h4 font-weight-bold d-flex justify-space-between mb-4 align-center">
         <div class="text-truncate">Вакансии компании {{ current_company.name }}</div>
       </h1>
@@ -114,9 +124,13 @@
                           " :key="item.raw.id">
                         {{ item.raw.check ? "Вы откликнулись" : "Откликнуться" }}
                       </v-btn> -->
-                      
-                      <v-btn variant="outlined" :href="`/edit-vacancy?id=${item.raw.id}`">
+
+                      <v-btn class="ma-3" variant="outlined" :href="`/edit-vacancy?id=${item.raw.id}`">
                         Редактировать
+                      </v-btn>
+
+                      <v-btn class="" color="red" variant="outlined" @click="deleteItem(item.raw.id)">
+                        Удалить
                       </v-btn>
                     </tbody>
                   </v-table>
@@ -133,13 +147,34 @@
             </v-footer>
           </template>
         </v-data-iterator>
+
+
+
       </v-main>
+
+
+      <v-dialog v-model="dialog" max-width="500">
+        <v-card>
+          <v-card-title class="headline">Выберите резюме</v-card-title>
+          <v-card-text>
+            <p class="mb-4">Удалить резюме?</p>
+
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" @click="deleteСonfirm(),dialog = false">Удалить</v-btn>
+            <v-btn color="error" @click="dialog = false">Отмена</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-responsive>
   </v-container>
 </template>
 
 <script>
 import { Vacancy } from "../services/vacancy.service.js";
+import { ref } from "vue";
+const dialog = ref(false)
 
 export default {
   data: () => ({
@@ -153,6 +188,7 @@ export default {
     show: false,
     shows: false,
     roleId: localStorage.getItem("roleId"),
+    target_to_remove: "",
 
     search_field: "",
     search_value: "",
@@ -172,48 +208,70 @@ export default {
     onClickSeeAll() {
       this.itemsPerPage = this.itemsPerPage === 4 ? this.items.length : 4;
     },
-    //async loadMyAdverts() {
-    //   let data = {
-    //     email: localStorage.getItem("email"),
-    //   };
-    //   let response = await Vacancy.allVacancies(data);
-    //   console.log(response);
-    //   if (response.err) {
-    //     console.log("Empty my_adverts list");
-    //   } else {
-    //     this.roleId = response.roleId;
-    //     this.companyId = response.companyId;
-    //     this.companyName = response.companyName;
-    //     const data = response.vacancies;
-    //     //console.log(response.vacancies)
 
-    //     const vacancies = response.vacancies;
-    //     const applications = response.applications;
-    //     const vacanciesWithCheck = vacancies.map((vacancy) => {
-    //       const isMatched = applications.some((app) => app.vacancyId === vacancy.id);
-    //       return {
-    //         ...vacancy,
-    //         check: isMatched,
-    //       };
-    //     });
-    //     this.items = vacanciesWithCheck.reverse();
-    //   }
 
-    //   if (localStorage.getItem("roleId") == null) {
-    //     location.reload();
-    //   }
-    //   {
-    //     localStorage.setItem("roleId", response.roleId);
-    //     localStorage.setItem("companyId", response.companyId);
-    //     if (response.companyName) {
-    //       localStorage.setItem("companyName", response.companyName.name);
-    //     }
-    //   }
-    // },
-    // },
+    async deleteItem(id) {
+      //this.dialog = false
+      this.dialog = true;
+      this.target_to_remove = id
+
+
+    },
+
+    async deleteСonfirm() {
+      console.log(this.target_to_remove);
+      await Vacancy.deleteVacancy(this.target_to_remove);
+      this.dialog = false
+      await this.loadAdvert();
+
+
+
+    },
   },
+
+
   async created() {
     await this.loadAdvert();
   },
 };
+
+//async loadMyAdverts() {
+//   let data = {
+//     email: localStorage.getItem("email"),
+//   };
+//   let response = await Vacancy.allVacancies(data);
+//   console.log(response);
+//   if (response.err) {
+//     console.log("Empty my_adverts list");
+//   } else {
+//     this.roleId = response.roleId;
+//     this.companyId = response.companyId;
+//     this.companyName = response.companyName;
+//     const data = response.vacancies;
+//     //console.log(response.vacancies)
+
+//     const vacancies = response.vacancies;
+//     const applications = response.applications;
+//     const vacanciesWithCheck = vacancies.map((vacancy) => {
+//       const isMatched = applications.some((app) => app.vacancyId === vacancy.id);
+//       return {
+//         ...vacancy,
+//         check: isMatched,
+//       };
+//     });
+//     this.items = vacanciesWithCheck.reverse();
+//   }
+
+//   if (localStorage.getItem("roleId") == null) {
+//     location.reload();
+//   }
+//   {
+//     localStorage.setItem("roleId", response.roleId);
+//     localStorage.setItem("companyId", response.companyId);
+//     if (response.companyName) {
+//       localStorage.setItem("companyName", response.companyName.name);
+//     }
+//   }
+// },
+// },
 </script>
