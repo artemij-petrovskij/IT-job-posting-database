@@ -53,7 +53,7 @@
                                                     Цвет: {{ item.raw.color }}<br>
                                                     {{ item.raw.age }}, {{ item.raw.mile_age }} км, {{ item.raw.body_type
                                                     }}<br>
-                                                    <!--  {{ age.raw.mile_age }} <br> -->
+                                                
                                                     {{ item.raw.date }}
 
                                                 <th>

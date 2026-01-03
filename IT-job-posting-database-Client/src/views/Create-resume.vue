@@ -2,65 +2,40 @@
   <v-main class="mx-3 py-5">
     <v-responsive class="align-center text-center">
       <v-card class="mx-auto" variant="text" max-width="900">
-        <h3
-          class="text-h4 font-weight-bold d-flex justify-space-between mb-4 align-center"
-        >
+        <h3 class="text-h4 font-weight-bold d-flex justify-space-between mb-4 align-center">
           Создать резюме
         </h3>
       </v-card>
 
-      <v-container class="align-center text-center pl-0" max-width="900" >
+      <v-container class="align-center text-center pl-0" max-width="900">
         <!---->
         <!-- <v-form ref="form1" v-model="valid" lazy-validation autocomplete="on" @submit.prevent> -->
-        <v-form  ref="form1" v-model="valid" lazy-validation @submit.prevent="submitForm">
-          <v-autocomplete
-            v-model="category"
-            @update:modelValue="getCategoryId()"
-            label="Категория"
-            :rules="[rules.required]"
-            :items="categories"
-          ></v-autocomplete>
-          <v-text-field
-            v-model="title"
-            label="Впишите желаемую должность"
-            :rules="[rules.required]"
-            hide-details
-            required
-          >
+        <v-form ref="form1" v-model="valid" lazy-validation @submit.prevent="submitForm">
+          <v-autocomplete v-model="category" @update:modelValue="getCategoryId()" label="Категория"
+            :rules="[rules.required]" :items="categories">
+            <template #item="{ props, item }">
+              <v-list-item v-bind="props">
+                <template #title>
+                  {{ item.raw.title }}
+                </template>
+                <template #subtitle>
+                  {{ item.raw.description }}
+                </template>
+              </v-list-item>
+            </template>
+          </v-autocomplete>
+          <v-text-field v-model="title" label="Впишите желаемую должность" :rules="[rules.required]" hide-details
+            required>
           </v-text-field>
-          <v-textarea
-            v-model="skills"
-            label="Опишите свои навыки"
-            :rules="[rules.required]"
-            hide-details
-            required
-          >
+          <v-textarea v-model="skills" label="Опишите свои навыки" :rules="[rules.required]" hide-details required>
           </v-textarea>
-          <v-text-field
-            v-model="salary"
-            label="Впишите желаемую заработную плату"
-            hide-details
-            required
-          >
+          <v-text-field v-model="salary" label="Впишите желаемую заработную плату" hide-details required>
           </v-text-field>
           <v-text-field v-model="description" label="о себе" hide-details required>
           </v-text-field>
-          <v-text-field
-            v-model="contacts"
-            :rules="[rules.required]"
-            label="Контакты:"
-            hide-details
-            required
-          >
+          <v-text-field v-model="contacts" :rules="[rules.required]" label="Контакты:" hide-details required>
           </v-text-field>
-          <v-btn
-           
-            class="mt-4"
-            color="success"
-            type="submit"
-            :disabled="!valid"
-            block
-          >
+          <v-btn class="mt-4" color="success" type="submit" :disabled="!valid" block>
             Создать резюме
           </v-btn>
         </v-form>
@@ -157,7 +132,7 @@ export default {
         //this.items = response.vacancies.reverse();
 
         const categoriesId = response.categories.map((x) => {
-          return { title: x.name, id: x.id };
+          return { title: x.name, id: x.id, description: x.description };
         });
         this.categories = categoriesId;
       }

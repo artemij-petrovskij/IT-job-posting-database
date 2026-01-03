@@ -5,6 +5,7 @@
                 <v-responsive class="align-center">
                     <!-- Таблица пользователей -->
                     <v-card title="Пользователи" class="mx-auto mt-4" max-width="1400">
+                        <v-btn block  variant="tonal">Добавить пользователя </v-btn>
                         <v-card-text>
                             <!-- Поиск по всей таблице -->
                             <v-text-field v-model="search" label="Поиск пользователей" prepend-inner-icon="mdi-magnify"
@@ -115,14 +116,14 @@
                             <!-- Действия -->
                             <template v-slot:item.actions="{ item }">
                                 <div class="d-flex">
-                                    <v-tooltip text="Редактировать" location="top">
+                                    <!-- <v-tooltip text="Редактировать" location="top">
                                         <template v-slot:activator="{ props }">
                                             <v-btn v-bind="props" icon size="small" color="primary" variant="text"
                                                 @click="editUser(item)">
                                                 <v-icon>mdi-pencil</v-icon>
                                             </v-btn>
                                         </template>
-                                    </v-tooltip>
+                                    </v-tooltip> -->
 
                                     <v-tooltip text="Удалить" location="top">
                                         <template v-slot:activator="{ props }">
@@ -348,7 +349,6 @@ export default {
             }));
         },
 
-        // Статистика
         usersWithCompany() {
             return this.users.filter(user => user.companyId).length;
         },
@@ -359,14 +359,12 @@ export default {
     },
 
     methods: {
-        // Получить инициалы для аватара
         getInitials(firstName, lastName) {
             const first = firstName ? firstName.charAt(0).toUpperCase() : '';
             const last = lastName ? lastName.charAt(0).toUpperCase() : '';
             return first + last;
         },
 
-        // Получить название компании по ID
         getCompanyName(companyId) {
             if (!companyId) return 'Без компании';
             const company = this.companies.find(c => c.id === companyId);
@@ -400,7 +398,6 @@ export default {
         editUser(user) {
             console.log("Редактировать пользователя:", user);
             this.showSnackbar(`Редактирование пользователя ${user.firstName} ${user.lastName}`);
-            // Здесь можно открыть модальное окно редактирования
         },
 
         confirmDeleteUser(user) {
@@ -475,13 +472,11 @@ export default {
                     jwt: localStorage.getItem("jwt")
                 };
 
-                // Загружаем пользователей
                 const usersResponse = await User.allUsers(data);
                 console.log(usersResponse)
                 let users = Array.isArray(usersResponse) ? usersResponse : [];
                 users.reverse();
                 
-                // Загружаем компании
                 const vacanciesResponse = await Vacancy.allVacancies(data);
                 if (vacanciesResponse.companies) {
                     this.companies = vacanciesResponse.companies.map(company => ({
@@ -498,7 +493,6 @@ export default {
                     desc: 'Пользователь не привязан к компании'
                 });
 
-                // Сохраняем пользователей (без дополнительных полей)
                 this.users = users;
 
                 this.show = true;

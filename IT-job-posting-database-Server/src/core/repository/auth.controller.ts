@@ -17,7 +17,7 @@ class UserAuth implements Auth {
 
     async loginUser(req: Request, res: Response): Promise<any> {
         const candidate = await UserMongo.findOne({ email: req.body.email })
-
+       
         if (candidate) {
             const isPasswordCorrect = bcrypt.compareSync(req.body.password, candidate.password)
 
@@ -34,6 +34,8 @@ class UserAuth implements Auth {
     }
 
     async signupUser(req: Request, res: Response): Promise<any> {
+         console.log(req.body)
+
         const candidate = await UserMongo.findOne({ email: req.body.email })
         if (candidate) {
             res.status(409).json({ message: 'Пользователь c таким логином уже существует' })
@@ -55,8 +57,8 @@ class UserAuth implements Auth {
             })
 
             ////
-
             //  await sequelize.sync({ alter: true });
+            
 
             //const adminRole1 = await Role.create({ roleName: "Recruiter" });
             // const adminRole = await Role.create({ roleName: "HR" }); 

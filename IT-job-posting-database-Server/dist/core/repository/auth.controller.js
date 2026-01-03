@@ -38,6 +38,7 @@ class UserAuth {
     }
     signupUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(req.body);
             const candidate = yield user_model_1.default.findOne({ email: req.body.email });
             if (candidate) {
                 res.status(409).json({ message: 'Пользователь c таким логином уже существует' });

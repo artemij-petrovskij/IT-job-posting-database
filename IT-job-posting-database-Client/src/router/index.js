@@ -162,6 +162,18 @@ const routes = [
     ],
   },
 
+      {
+    path: '/add-users',
+    component: () => import('@/layouts/admin/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'add users',
+        component: () => import('@/views/Admin-add-users.vue'),
+      },
+    ],
+  },
+
 
   {
     path: '/create-vacancy',

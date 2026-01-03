@@ -11,26 +11,26 @@
           </h3>
         </v-card>
         <v-fade-transition>
-          <div v-if="show" class="my-box">
+          <div v-if="show" class="my-box" >
             <v-data-iterator
               :items="items"
               :items-per-page="itemsPerPage"
               class="mx-auto"
               variant="text"
-              max-width="900"
+            
             >
-              <template v-slot:header="{ page, pageCount, prevPage, nextPage }">
+              <template v-slot:header="{ page, pageCount, prevPage, nextPage }" max-width="100px">
                 <h1
                   class="text-h4 font-weight-bold d-flex mb-4 align-center"
                 >
-                  <div class="mx-auto" variant="text" max-width="900">
+                  <div class="mx-auto" variant="text" >
                     <v-btn class="me-8" variant="text" @click="onClickSeeAll">
                       <span class="text-decoration-underline text-none"
                         >Посмотреть все</span
                       >
                     </v-btn>
 
-                    <div class="d-inline-flex">
+                    <div class="d-inline-flex" >
                       <v-btn
                         :disabled="page === 1"
                         class="me-2"
@@ -54,16 +54,17 @@
 
               <template v-slot:default="{ items }"  class="mx-auto"
         variant="text"
-        max-width="900">
+        >
                 <v-row>
-                  <v-col v-for="(item, i) in items" :key="i" cols="12" sm="12" xl="3">
-                    <v-sheet border class="mx-auto" variant="text" max-width="900">
+                  <v-col v-for="(item, i) in items" :key="i" cols="12" sm="12" xl="3" >
+                    <v-sheet border class="mx-auto" variant="text" max-width="900" >
                       <v-list-item
                         :title="item.raw"
                         :href="`/applicant?id=${item.raw.id}`"
                         density="comfortable"
                         lines="two"
                         subtitle="Резюме"
+                        style="width: 1200px!important;"
                       >
                         <template v-slot:title>
                           <strong class="text-h6">
@@ -175,7 +176,7 @@ export default {
     },
 
     onClickSeeAll() {
-      this.itemsPerPage = this.itemsPerPage === 4 ? this.my_adverts.length : 12;
+      this.itemsPerPage = this.itemsPerPage === 2 ? this.my_adverts.length : 2;
     },
 
     async deleteItem(id) {

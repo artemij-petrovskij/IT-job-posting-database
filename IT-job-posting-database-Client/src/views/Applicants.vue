@@ -79,7 +79,7 @@
                 >
                   <v-list-item
                     :title="item.raw.title"
-                    :href="`/vacancy?id=${item.raw.id}&company=${item.raw.title}&companyId=${item.raw.title}&description=${item.raw.title}`"
+                    :href="`/applicant?id=${item.raw.id}&company=${item.raw.title}&companyId=${item.raw.title}&description=${item.raw.title}`"
                     density="comfortable"
                     target="_blank"
                     lines="two"

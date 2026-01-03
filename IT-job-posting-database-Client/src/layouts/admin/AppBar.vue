@@ -12,6 +12,7 @@
     <v-btn class="auth" to="/create-company">Добавить компанию </v-btn>
 
     <v-btn class="auth" to="/create-category">Добавить категорию </v-btn>
+    <v-btn class="auth" to="/add-users">Добавить пользователей </v-btn>
 
     <v-btn class="auth" to="/assign-users">Назначить пользователей </v-btn>
 

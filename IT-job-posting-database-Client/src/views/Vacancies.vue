@@ -35,7 +35,19 @@
               </v-radio-group>
 
               <v-autocomplete clearable v-model="category" @update:modelValue="getCategoryId()" label="Категория"
-                :items="categories"></v-autocomplete>
+                :items="categories">
+
+                <template #item="{ props, item }">
+                  <v-list-item v-bind="props">
+                    <template #title>
+                      {{ item.raw.title }}
+                    </template>
+                    <template #subtitle>
+                      {{ item.raw.description }}
+                    </template>
+                  </v-list-item>
+                </template>
+              </v-autocomplete>
             </v-responsive>
           </div>
         </v-expand-transition>
@@ -122,7 +134,7 @@
                             </div>
 
 
-                            <v-btn   :icon="isFavorite(item.raw.id) ? 'mdi-heart' : 'mdi-heart-outline'"
+                            <v-btn :icon="isFavorite(item.raw.id) ? 'mdi-heart' : 'mdi-heart-outline'"
                               @click="toggleFavorite(item.raw)" variant="text"
                               :color="isFavorite(item.raw.id) ? 'red' : 'grey-lighten-1'" size="large" class="ml-2">
                             </v-btn>
@@ -477,7 +489,7 @@ export default {
         this.companyName = response.companyName;
 
         const categoriesId = response.categories.map((x) => {
-          return { title: x.name, id: x.id };
+          return { title: x.name, id: x.id , description: x.description };
         });
         this.categories = categoriesId;
 
